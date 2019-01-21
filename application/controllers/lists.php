@@ -4,17 +4,18 @@ use Restserver\Libraries\REST_Controller;
 require APPPATH . 'libraries/REST_Controller.php';
 require APPPATH . 'libraries/Format.php';
  
-class Items extends REST_Controller{
+class Lists extends REST_Controller{
     
     public function __construct()
     {
         parent::__construct();
 
         $this->load->model('item_model');
+        $this->load->model('list_model');
     }
 
     //Get Item by ID
-    function getItemById_get(){
+    function getListById_get(){
 
         $id  = $this->get('id');
         
@@ -25,11 +26,15 @@ class Items extends REST_Controller{
             exit;
         }
 
-        $result = $this->item_model->getItemById($id);
+        $list = $this->list_model-> getListById($id);
 
-        if($result){
-
-            $this->response($result, 200); 
+        if($list){
+            
+            $items = $this->item_model->getItemsByListId($list['id']);
+            
+            $list['items'] = $items;
+            
+            $this->response($list, 200); 
 
             exit;
         } 

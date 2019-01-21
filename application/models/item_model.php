@@ -28,7 +28,7 @@
     //Add new item
     public function addItem($data){
 
-        $this->db->insert('book', $data);
+        $this->db->insert('item', $data);
 
         return $this->db->insert_id();
 
@@ -44,7 +44,7 @@
     }
     
     //Update Item
-    public function update($id, $data){
+    public function updateItem($id, $data){
 
        $this->db->where('id', $id);
 
