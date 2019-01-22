@@ -14,6 +14,11 @@ class Lists extends REST_Controller{
         $this->load->model('list_model');
         $this->load->model('user_model');
     }
+    
+        
+    public function index_get() {
+        $this->load->view('list_view');
+    }
 
     //Get List by ID
     function getListById_get(){
