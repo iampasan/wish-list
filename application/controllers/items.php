@@ -42,31 +42,31 @@ class Items extends REST_Controller{
     } 
 
     //Get items by List ID
-//    function getItemsByListId_get(){
-//        
-//        $list_id  = $this->get('list_id');
-//        
-//        if(!$list_id){
-//
-//            $this->response("No list ID specified!", 400);
-//
-//            exit;
-//        }
-//        
-//        $result = $this->item_model->getItemsByListId($list_id);
-//
-//        if($result){
-//
-//            $this->response($result, 200); 
-//
-//        } 
-//
-//        else{
-//
-//            $this->response("No items found", 404);
-//
-//        }
-//    }
+    function getItemsByListId_get(){
+        
+        $list_id  = $this->get('list_id');
+        
+        if(!$list_id){
+
+            $this->response("No list ID specified!", 400);
+
+            exit;
+        }
+        
+        $result = $this->item_model->getItemsByListId($list_id);
+
+        if($result){
+
+            $this->response($result, 200); 
+
+        } 
+
+        else{
+
+            $this->response("No items found", 404);
+
+        }
+    }
      
     //Create a new item
     function addItem_post(){
@@ -144,10 +144,10 @@ class Items extends REST_Controller{
     }
 
     //Delete an item
-    function deleteItem_delete()
+    function deleteItem_delete($id)
     {
 
-        $id  = $this->delete('id');
+        //$id  = $this->get('id');
 
         if(!$id){
 
