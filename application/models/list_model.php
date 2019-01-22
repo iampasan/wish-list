@@ -21,7 +21,7 @@
           
         $query = $this->db->get_where('list', array('owner' => $user_name));
          
-        return $query->result_array();
+        return $query->row_array();
          
     }
     

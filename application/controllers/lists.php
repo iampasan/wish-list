@@ -12,9 +12,10 @@ class Lists extends REST_Controller{
 
         $this->load->model('item_model');
         $this->load->model('list_model');
+        $this->load->model('user_model');
     }
 
-    //Get Item by ID
+    //Get List by ID
     function getListById_get(){
 
         $id  = $this->get('id');
@@ -30,9 +31,7 @@ class Lists extends REST_Controller{
 
         if($list){
             
-            $items = $this->item_model->getItemsByListId($list['id']);
-            
-            $list['items'] = $items;
+            $list = $this->appendItems($list);
             
             $this->response($list, 200); 
 
@@ -44,7 +43,53 @@ class Lists extends REST_Controller{
 
             exit;
         }
-    } 
+    }
+    
+    
+        function getListByUser_get(){
+
+        $username  = $this->get('username');
+        
+        if(!$username){
+
+            $this->response("No username specified!", 400);
+
+            exit;
+        }
+        elseif (!$this->user_model-> userExists($username)) {
+            
+            $this->response("Invalid user name!", 400);
+
+            exit;
+    }
+
+        $list = $this->list_model-> getListByUser($username);
+
+        if($list){
+            
+            $list = $this->appendItems($list);
+            
+            $this->response($list, 200); 
+
+            exit;
+        } 
+        else{
+
+             $this->response("No list available for this user.", 404);
+
+            exit;
+        }
+    }
+    
+    
+    
+    private function appendItems($list){
+        $items = $this->item_model->getItemsByListId($list['id']);
+            
+        $list['items'] = $items;
+        
+        return $list;
+    }
 
     //Get items by List ID
 //    function getItemsByListId_get(){
