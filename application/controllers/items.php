@@ -14,7 +14,7 @@ class Items extends REST_Controller{
     }
 
     //Get Item by ID
-    function getItemById_get(){
+    function item_get($id){
 
         $id  = $this->get('id');
         
@@ -42,7 +42,7 @@ class Items extends REST_Controller{
     } 
 
     //Get items by List ID
-    function getItemsByListId_get(){
+    function items_get($list_id){
         
         $list_id  = $this->get('list_id');
         
@@ -69,7 +69,7 @@ class Items extends REST_Controller{
     }
      
     //Create a new item
-    function addItem_post(){
+    function item_post(){
 
          $title = $this->post('title');
 
@@ -105,7 +105,7 @@ class Items extends REST_Controller{
 
     
     //Update an item
-    function updateItem_put(){
+    function item_put(){
          
          $id = $this->put('id');
          
@@ -144,7 +144,7 @@ class Items extends REST_Controller{
     }
 
     //Delete an item
-    function deleteItem_delete($id)
+    function item_delete($id)
     {
 
         //$id  = $this->get('id');
