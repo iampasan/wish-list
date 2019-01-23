@@ -18,6 +18,8 @@
       
     //Get Items by List ID
     public function getItemsByListId($list_id){
+        
+        $this->db->select('id, title, url, price, priority');
           
         $query = $this->db->get_where('item', array('list_id' => $list_id));
          

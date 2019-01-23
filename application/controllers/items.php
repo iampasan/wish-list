@@ -16,7 +16,7 @@ class Items extends REST_Controller{
     //Get Item by ID
     function item_get($id){
 
-        $id  = $this->get('id');
+        //$id  = $this->get('id');
         
         if(!$id){
 
@@ -42,9 +42,9 @@ class Items extends REST_Controller{
     } 
 
     //Get items by List ID
-    function items_get($list_id){
+    function itemsByList_get($list_id){
         
-        $list_id  = $this->get('list_id');
+        //$list_id  = $this->get('list_id');
         
         if(!$list_id){
 
@@ -91,11 +91,11 @@ class Items extends REST_Controller{
 
             if($result){
                 
-                $this->response("Success", 200);  
+                $this->response($result, 200);  
 
             }else{
                 
-                $this->response("Item not saved", 404);
+                $this->response("Item not saved", 400);
                           
             }
 

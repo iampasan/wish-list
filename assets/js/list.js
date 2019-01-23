@@ -1,17 +1,17 @@
+//AJAX Prefilter to direct all the requests to the backend server
+$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+    options.url = 'http://localhost/wish-list' + options.url;
+});
+
 /*Global Variables*/
 var currentItemId;
 
-
-
-
-
 //Item Model
 var Item = Backbone.Model.extend({
+    urlRoot: '/items/item',
     defaults: {
-        id: '',
         title: '',
         url: '',
-        list_id: '',
         price: '',
         priority: ''
     }
@@ -19,29 +19,30 @@ var Item = Backbone.Model.extend({
 
 //Items collection
 var Items = Backbone.Collection.extend({
+    url: '/items/itemsByList/1',
     model: Item
 });
 
-var item1 = new Item({
-    id: '1',
-    title: 'Item1',
-    url: 'item1url',
-    list_id: '1',
-    price: '123',
-    priority: '1'
-});
-
-var item2 = new Item({
-    id: '2',
-    title: 'Item2',
-    url: 'item1url',
-    list_id: '1',
-    price: '123',
-    priority: '1'
-});
+//var item1 = new Item({
+//    id: '1',
+//    title: 'Item1',
+//    url: 'item1url',
+//    list_id: '1',
+//    price: '123',
+//    priority: '1'
+//});
+//
+//var item2 = new Item({
+//    id: '2',
+//    title: 'Item2',
+//    url: 'item1url',
+//    list_id: '1',
+//    price: '123',
+//    priority: '1'
+//});
 
 //Instantiate collection
-var items = new Items([item1, item2]);
+var items = new Items();
 
 //Backbone View single Item
 var ItemView = Backbone.View.extend({
@@ -87,7 +88,15 @@ var ItemsView = Backbone.View.extend({
     initialize: function() {
         this.render();
         this.model.bind('add change remove', this.render, this);
-        console.log(this.model);
+        this.model.fetch({
+            success: function() {
+                console.log('Succeessfully loaded!');
+            },
+            error: function() {
+                console.log('Failed to load items!');
+            }
+        });
+
     },
     render: function() {
         var self = this;
@@ -111,15 +120,30 @@ $(document).ready(function() {
 
     //Clicking save button to save the new item
     $('#save-item-btn').on('click', function() {
-        var item = new Item(getCurrentModalItem());
-        items.add(item);
+        var item = new Item();
+        item.save(getCurrentModalItem(), {
+            success: function(model, response) {
+                //Id is the response on this endpoint
+                item.set('id', response);
+                items.add(item);
+            },
+            error: function() {
+                console.log('Failed to post');
+            }
+        });
     });
 
     //Clicking the update button to update the item
     $('#update-item-btn').on('click', function() {
         var item = items.get(currentItemId);
-        item.set(getCurrentModalItem());
-        items.set(item, {remove: false});
+        item.save(getCurrentModalItem(), {
+            success: function() {
+                items.set(item, {remove: false})
+            },
+            error: function() { 
+                console.log('Failed to update!');
+            }
+        });
     });
 
     //Clicking the delete button to delete the item
@@ -150,9 +174,17 @@ function getCurrentModalItem() {
         title: $('#input-title').val(),
         url: $('#input-url').val(),
         price: $('#input-price').val(),
-        priority: $('#input-priority').val()
+        priority: $('#input-priority').val(),
+        list_id: 1
     };
     return item;
+}
+
+function displayInfo(title, message) {
+    $('#infoModalLabel').text(title);
+    $('#info-modal-description').text(message);
+    $('#infoModal').modal('show');
+
 }
 
 function setFeilds(title, url, price, priority) {
