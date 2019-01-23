@@ -85,7 +85,8 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button id="save-item" class="btn btn-primary">Save</button>
+                            <button id="save-item-btn" class="btn btn-primary">Save</button>
+                            <button id="update-item-btn" class="btn btn-primary">Update</button>
                         </div>
                     </div>
                 </div>
@@ -122,7 +123,7 @@
             <td><span class="price"><%= price %></span></td>
             <td><span class="priority"><%= priority %></span></td>
             <td>
-            <button class="btn btn-primary" id="edit-item-btn">Edit</button>
+            <button class="btn btn-primary" id="update-item-trigger-btn">Edit</button>
             <button class="btn btn-danger" id="delete-item-btn">Delete</button>
             </td> 
 

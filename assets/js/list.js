@@ -1,4 +1,11 @@
-//Backbone Model
+/*Global Variables*/
+var currentUpdateId;
+
+
+
+
+
+//Item Model
 var Item = Backbone.Model.extend({
     defaults: {
         id: '',
@@ -10,9 +17,9 @@ var Item = Backbone.Model.extend({
     }
 });
 
-//Backbone Collections
+//Items collection
 var Items = Backbone.Collection.extend({
-    model:Item
+    model: Item
 });
 
 var item1 = new Item({
@@ -36,12 +43,30 @@ var item2 = new Item({
 //Instantiate collection
 var items = new Items([item1, item2]);
 
-//Backbone View for 1 Item
+//Backbone View single Item
 var ItemView = Backbone.View.extend({
     model: new Item(),
     tagName: 'tr',
     initialize: function() {
         this.template = _.template($('.item-template').html());
+    },
+    events: {
+        'click #update-item-trigger-btn': 'open_update',
+    },
+    open_update: function() {
+        
+        //Setting the text feilds
+        var title = this.model.get('title');
+        var url = this.model.get('url');
+        var price = this.model.get('price');
+        var priority = this.model.get('priority');
+        setFeilds(title, url, price, priority);
+        
+        //Ready the model and set the currentupdateID
+        currentUpdateId = this.model.get('id');
+        console.log("Current update id " + currentUpdateId);
+        readyModal('edit');
+        $('#itemModal').modal('show');
     },
     render: function() {
         this.$el.html(this.template(this.model.toJSON()));
@@ -49,6 +74,7 @@ var ItemView = Backbone.View.extend({
     }
 });
 
+//Backbone view for collection of items
 var ItemsView = Backbone.View.extend({
     model: items,
     el: $('.items-list'),
@@ -67,34 +93,75 @@ var ItemsView = Backbone.View.extend({
     }
 });
 
+//Initialize items view
 var itemsView = new ItemsView();
 
 $(document).ready(function() {
-    
-    $('#item-add-modal-btn').on('click',function(){
-        $('#itemModalLabel').text('Add Item');
+
+    //Opening Add modal to add item
+    $('#item-add-modal-btn').on('click', function() {
+        readyModal('add');
     });
 
-
-    $('#save-item').on('click', function() {
-        var item = new Item({
-            title: $('#input-title').val(),
-            url: $('#input-url').val(),
-            list_id: '1',
-            price: $('#input-price').val(),
-            priority: $('#input-priority').val()
-        });
+    //Clicking save button to save the new item
+    $('#save-item-btn').on('click', function() {
+        var item = new Item(getCurrentModalItem());
         console.log(item.toJSON());
         items.add(item);
+        console.log(items.toJSON());
+    });
+
+    //Clicking the update button to update the item
+    $('#update-item-btn').on('click', function() {
+        
+
+        var item = items.get(currentUpdateId);
+        item.set(getCurrentModalItem());
+        items.set(item,{remove: false});
+        console.log(item.toJSON());
         console.log(items.toJSON());
     });
 
 
 });
 
-function clearFeilds(){
+
+function readyModal(state) {
+    if (state == 'add') {
+        $('#itemModalLabel').text('Add Item');
+        $('#update-item-btn').hide();
+        $('#save-item-btn').show();
+        clearFeilds();
+    }
+    else if (state == 'edit') {
+        $('#itemModalLabel').text('Edit Item');
+        $('#save-item-btn').hide();
+        $('#update-item-btn').show();
+    }
+}
+
+function getCurrentModalItem() {
+    var item = {
+        title: $('#input-title').val(),
+        url: $('#input-url').val(),
+        price: $('#input-price').val(),
+        priority: $('#input-priority').val()
+    }
+
+    return item;
+}
+
+function setFeilds(title, url, price, priority) {
+    $('#input-title').val(title);
+    $('#input-url').val(url);
+    $('#input-price').val(price);
+    $('#input-priority').val(priority);
+}
+
+function clearFeilds() {
     $('#input-title').val('');
-    $('##input-url').val('');
+    $('#input-url').val('');
     $('#input-price').val('');
     $('#input-priority').val('');
+
 }
