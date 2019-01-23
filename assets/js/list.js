@@ -1,5 +1,5 @@
 /*Global Variables*/
-var currentUpdateId;
+var currentItemId;
 
 
 
@@ -52,21 +52,27 @@ var ItemView = Backbone.View.extend({
     },
     events: {
         'click #update-item-trigger-btn': 'open_update',
+        'click #delete-item-trigger-btn': 'open_delete'
     },
     open_update: function() {
-        
+
         //Setting the text feilds
         var title = this.model.get('title');
         var url = this.model.get('url');
         var price = this.model.get('price');
         var priority = this.model.get('priority');
         setFeilds(title, url, price, priority);
-        
-        //Ready the model and set the currentupdateID
-        currentUpdateId = this.model.get('id');
-        console.log("Current update id " + currentUpdateId);
+
+        //Ready the model and set the currentItemId
+        currentItemId = this.model.get('id');
+        console.log("Current update id " + currentItemId);
         readyModal('edit');
         $('#itemModal').modal('show');
+    },
+    open_delete: function() {
+        currentItemId = this.model.get('id');
+        $('#delete-modal-item-title').text(this.model.get('title'));
+        $('#deleteModal').modal('show');
     },
     render: function() {
         this.$el.html(this.template(this.model.toJSON()));
@@ -80,7 +86,7 @@ var ItemsView = Backbone.View.extend({
     el: $('.items-list'),
     initialize: function() {
         this.render();
-        this.model.bind('add change', this.render, this);
+        this.model.bind('add change remove', this.render, this);
         console.log(this.model);
     },
     render: function() {
@@ -106,22 +112,21 @@ $(document).ready(function() {
     //Clicking save button to save the new item
     $('#save-item-btn').on('click', function() {
         var item = new Item(getCurrentModalItem());
-        console.log(item.toJSON());
         items.add(item);
-        console.log(items.toJSON());
     });
 
     //Clicking the update button to update the item
     $('#update-item-btn').on('click', function() {
-        
-
-        var item = items.get(currentUpdateId);
+        var item = items.get(currentItemId);
         item.set(getCurrentModalItem());
-        items.set(item,{remove: false});
-        console.log(item.toJSON());
-        console.log(items.toJSON());
+        items.set(item, {remove: false});
     });
 
+    //Clicking the delete button to delete the item
+    $('#delete-item-btn').on('click', function() {
+        items.remove(currentItemId);
+        console.log(items.toJSON());
+    });
 
 });
 
@@ -146,8 +151,7 @@ function getCurrentModalItem() {
         url: $('#input-url').val(),
         price: $('#input-price').val(),
         priority: $('#input-priority').val()
-    }
-
+    };
     return item;
 }
 
