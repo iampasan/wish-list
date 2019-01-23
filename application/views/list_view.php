@@ -32,33 +32,72 @@
             </div>
 
             <!--Add Item-->
-            <span>
-                <div class="form-group">
-                    <label for="exampleInputEmail1">Title</label>
-                    <input class="form-control" id="input-title" placeholder="Enter Title">
+            <!--            <div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Title</label>
+                                <input class="form-control" id="input-title" placeholder="Enter Title">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">URL</label>
+                                <input class="form-control" id="input-url" placeholder="Enter URL">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Price</label>
+                                <input class="form-control" id="input-price" placeholder="Enter Price">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Priority</label>
+                                <input class="form-control" id="input-priority" placeholder="Enter Priority">
+                            </div>
+            
+                            <button id="add-item" class="btn btn-primary">Submit</button>
+                        </div>-->
+
+            <!-- Add and update Modal -->
+            <div class="modal fade" id="itemModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="itemModalLabel">Item</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Title</label>
+                                    <input class="form-control" id="input-title" placeholder="Enter Title">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">URL</label>
+                                    <input class="form-control" id="input-url" placeholder="Enter URL">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Price</label>
+                                    <input class="form-control" id="input-price" placeholder="Enter Price">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Priority</label>
+                                    <input class="form-control" id="input-priority" placeholder="Enter Priority">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button id="save-item" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="exampleInputEmail1">URL</label>
-                    <input class="form-control" id="input-url" placeholder="Enter URL">
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputEmail1">Price</label>
-                    <input class="form-control" id="input-price" placeholder="Enter Price">
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputEmail1">Priority</label>
-                    <input class="form-control" id="input-priority" placeholder="Enter Priority">
-                </div>
-
-                <button id="add-item" class="btn btn-primary">Submit</button>
-            </span>
-
-
-
-
+            </div>
 
 
             <div class="container wish-list">
+
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary mb-3" id="item-add-modal-btn" data-toggle="modal" data-target="#itemModal">
+                    Add Item
+                </button>
 
                 <table class="table">
                     <thead class="thead-dark">
@@ -82,90 +121,16 @@
             <td><span class="url"><%= url %></span></td>
             <td><span class="price"><%= price %></span></td>
             <td><span class="priority"><%= priority %></span></td>
-            <td><button class="btn btn-primary">Edit</button></td> 
+            <td>
+            <button class="btn btn-primary" id="edit-item-btn">Edit</button>
+            <button class="btn btn-danger" id="delete-item-btn">Delete</button>
+            </td> 
 
         </script>
 
 
 
-        <script language="javascript">
-            //Backbone Model
-            var Item = Backbone.Model.extend({
-                defaults: {
-                    id: '',
-                    title: '',
-                    url: '',
-                    list_id: '',
-                    price: '',
-                    priority: '',
-                }
-            });
-            //Backbone Collections
-            var Items = Backbone.Collection.extend({});
-            var item1 = new Item({
-                id: '1',
-                title: 'Item1',
-                url: 'item1url',
-                list_id: '1',
-                price: '123',
-                priority: '1'
-            });
-            var item2 = new Item({
-                id: '2',
-                title: 'Item2',
-                url: 'item1url',
-                list_id: '1',
-                price: '123',
-                priority: '1'
-            });
-            //Instantiate collection
-            var items = new Items([item1, item2]);
-            //Backbone View for 1 Item
-            var ItemView = Backbone.View.extend({
-                model: new Item(),
-                tagName: 'tr',
-                initialize: function() {
-                    this.template = _.template($('.item-template').html())
-                },
-                render: function() {
-                    this.$el.html(this.template(this.model.toJSON()));
-                }
-            });
-
-            var ItemsView = Backbone.View.extend({
-                model: items,
-                el: $('.items-list'),
-                initialize: function() {
-                    this.model.on('add', this.render(), this)
-                },
-                render: function() {
-                    var self = this;
-                    this.$el.html(''); //Flush
-                    _.each(this.model.toArray(), function(item) {
-                        self.$el.append((new Blogview({model: item})).render().$el);
-                    });
-                }
-
-
-            });
-            $(document).ready(function() {
-                $('#add-item').on('click', function() {
-                    var item = new Item({
-                        id: '2',
-                        title: $('#input-title').val(),
-                        url: $('#input-title').val(),
-                        list_id: '1',
-                        price: $('#input-price').val(),
-                        priority: $('#input-priority').val()
-                    });
-                    console.log(item.toJSON());
-                });
-            });
-
-
-
-
-        </script>
+        <script src="<?php echo base_url("assets/js/list.js"); ?>"></script>
 
     </body>
 </html>
