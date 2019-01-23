@@ -21,9 +21,9 @@ class Lists extends REST_Controller{
     }
 
     //Get List by ID
-    function getListById_get(){
+    function list_get($id){
 
-        $id  = $this->get('id');
+        //$id  = $this->get('id');
         
         if(!$id){
 
@@ -36,7 +36,11 @@ class Lists extends REST_Controller{
 
         if($list){
             
-            $list = $this->appendItems($list);
+            //$list = $this->appendItems($list);
+            
+            //Put owner's name instead of user ID
+            //$list['owner'] = $this->user_model->getName($list['owner'])['name'];
+            unset($list['owner']);
             
             $this->response($list, 200); 
 

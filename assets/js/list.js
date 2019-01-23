@@ -4,7 +4,18 @@ $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
 });
 
 /*Global Variables*/
-var currentItemId;
+var currentListId = 1;
+
+//List Modal
+var List = Backbone.Model.extend({
+    url: '/lists/list',
+    defaults: {
+        title: '',
+        url: '',
+        price: '',
+        priority: ''
+    }
+});
 
 //Item Model
 var Item = Backbone.Model.extend({
@@ -19,7 +30,7 @@ var Item = Backbone.Model.extend({
 
 //Items collection
 var Items = Backbone.Collection.extend({
-    url: '/items/itemsByList/1',
+    url: '/items/itemsByList/'+currentListId,
     model: Item,
     comparator: function(item) {
         switch (item.get('priority')) {
@@ -50,24 +61,10 @@ var ItemView = Backbone.View.extend({
         'click #delete-item-trigger-btn': 'open_delete'
     },
     open_update: function() {
-
-        //Setting the text feilds
-        var title = this.model.get('title');
-        var url = this.model.get('url');
-        var price = this.model.get('price');
-        var priority = this.model.get('priority');
-        setFeilds(title, url, price, priority);
-
-        //Ready the model and set the currentItemId
-        currentItemId = this.model.get('id');
-        console.log("Current update id " + currentItemId);
-        readyModal('edit');
-        $('#itemModal').modal('show');
+        new ItemOperationView({model: this.model}).show();
     },
     open_delete: function() {
-        currentItemId = this.model.get('id');
-        $('#delete-modal-item-title').text(this.model.get('title'));
-        $('#deleteModal').modal('show');
+        new ItemDeleteView({model: this.model}).show();
     },
     render: function() {
         this.$el.html(this.template(this.model.toJSON()));
@@ -102,76 +99,150 @@ var ItemsView = Backbone.View.extend({
     }
 });
 
-//Initialize Items View
-var itemsView = new ItemsView();
-
-$(document).ready(function() {
-
-    //Opening Add modal to add item
-    $('#item-add-modal-btn').on('click', function() {
-        readyModal('add');
-    });
-
-    //Clicking save button to save the new item
-    $('#save-item-btn').on('click', function() {
-        var item = new Item();
-        item.save(getCurrentModalItem(), {
+var ItemOperationView = Backbone.View.extend({
+    model: new Item(),
+    el: $('.item-operation-modal'),
+    initialize: function() {
+        this.template = _.template($('.item-operation-template').html());
+        this.render();
+    },
+    render: function() {
+        this.$el.html(''); //Flush
+        this.$el.html(this.template(this.model.toJSON()));
+        return this;
+    },
+    events: {
+        'click #save-item-btn': 'save',
+        'click #update-item-btn': 'update'
+    },
+    show: function() {
+        if (!this.model.get('id')) {
+            //No ID means adding new item
+            this.$('#itemModalLabel').html('Add Item');
+            $('#update-item-btn').hide();
+            $('#save-item-btn').show();
+        } else {
+            //Have an ID means updating an item
+            setOperationFeilds(
+                    this.model.get('title'),
+                    this.model.get('url'),
+                    this.model.get('price'),
+                    this.model.get('priority')
+                    );
+            this.$('#itemModalLabel').html('Edit Item');
+            $('#save-item-btn').hide();
+            $('#update-item-btn').show();
+        }
+        $('#itemModal').modal('show');
+    },
+    hide: function() {
+        var self = this;
+        $('#itemModal').modal('hide');
+        setTimeout(function() {
+            self.destroy();
+        }, 500);
+    },
+    destroy: function() {
+        this.undelegateEvents();
+        this.$el.removeData().unbind();
+        this.$el.empty();
+    },
+    save: function() {
+        var self = this;
+        self.model.save(getCurrentModalItem(), {
             wait: true,
             success: function(model, response) {
                 //Id is the response on this endpoint
-                item.set('id', response);
-                items.add(item);
+                self.model.set('id', response);
+                items.add(self.model);
             },
             error: function() {
                 console.log('Failed to post');
             }
-        });
-    });
-
-    //Clicking the update button to update the item
-    $('#update-item-btn').on('click', function() {
-        var item = items.get(currentItemId);
-        item.save(getCurrentModalItem(), {
+        }).always(
+                function() {
+                    self.hide();
+                }
+        );
+    },
+    update: function() {
+        var self = this;
+        this.model.save(getCurrentModalItem(), {
             wait: true,
             success: function() {
-                items.set(item, {remove: false})
+                console.log('Updated successfully');
             },
             error: function() {
                 console.log('Failed to update!');
             }
-        });
-    });
+        }).always(
+                function() {
+                    self.hide();
+                }
+        );
+    }
+});
 
-    //Clicking the delete button to delete the item
-    $('#delete-item-btn').on('click', function() {
-        var item = items.get(currentItemId);
-        item.destroy({
+var ItemDeleteView = Backbone.View.extend({
+    el: $('.item-operation-modal'),
+    initialize: function() {
+        this.template = _.template($('.item-delete-template').html());
+        this.render();
+    },
+    render: function() {
+        this.$el.html(''); //Flush
+        this.$el.html(this.template(this.model.toJSON()));
+        return this;
+    },
+    events: {
+        'click #delete-item-btn': 'delete',
+    },
+    show: function() {
+        $('#deleteModal').modal('show');
+    },
+    hide: function() {
+        var self = this;
+        $('#deleteModal').modal('hide');
+        setTimeout(function() {
+            self.destroy();
+        }, 500);
+    },
+    destroy: function() {
+        this.undelegateEvents();
+        this.$el.removeData().unbind();
+        this.$el.empty();
+    },
+    delete: function() {
+        var self = this;
+        this.model.destroy({
             wait: true,
             success: function() {
-                //items.remove(currentItemId);
+                console.log('Removed Successfully!!');
             },
             error: function() {
                 console.log('Failed to delete item');
             }
-        });
-    });
+        }).always(
+                function() {
+                    self.hide();
+                }
+        );
+    }
+});
 
+//Initialize Items View
+var itemsView = new ItemsView();
+
+$(document).ready(function() {
+    //Opening Add modal to add item
+    $('#item-add-modal-btn').on('click', function() {
+        console.log('Gets here');
+        new ItemOperationView({model: new Item()}).show();
+    });
 });
 
 
-function readyModal(state) {
-    if (state == 'add') {
-        $('#itemModalLabel').text('Add Item');
-        $('#update-item-btn').hide();
-        $('#save-item-btn').show();
-        clearFeilds();
-    }
-    else if (state == 'edit') {
-        $('#itemModalLabel').text('Edit Item');
-        $('#save-item-btn').hide();
-        $('#update-item-btn').show();
-    }
-}
+/*-----Helper Methods-----*/
 
 function getCurrentModalItem() {
     var item = {
@@ -191,17 +262,16 @@ function displayInfo(title, message) {
 
 }
 
-function setFeilds(title, url, price, priority) {
+function setOperationFeilds(title, url, price, priority) {
     $('#input-title').val(title);
     $('#input-url').val(url);
     $('#input-price').val(price);
     $('#input-priority').val(priority);
 }
 
-function clearFeilds() {
+function clearOperationFeilds() {
     $('#input-title').val('');
     $('#input-url').val('');
     $('#input-price').val('');
     $('#input-priority').val('Medium');
-
 }

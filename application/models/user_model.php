@@ -23,7 +23,7 @@
           
         $query = $this->db->get_where('user', array('username' => $username));
          
-        return $query->result_array();
+        return $query->row_array();
          
     }
     
