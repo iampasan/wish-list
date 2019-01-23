@@ -31,28 +31,6 @@
                 </div>
             </div>
 
-            <!--Add Item-->
-            <!--            <div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Title</label>
-                                <input class="form-control" id="input-title" placeholder="Enter Title">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">URL</label>
-                                <input class="form-control" id="input-url" placeholder="Enter URL">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Price</label>
-                                <input class="form-control" id="input-price" placeholder="Enter Price">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Priority</label>
-                                <input class="form-control" id="input-priority" placeholder="Enter Priority">
-                            </div>
-            
-                            <button id="add-item" class="btn btn-primary">Submit</button>
-                        </div>-->
-
             <!-- Add and update Modal -->
             <div class="modal fade" id="itemModal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -66,20 +44,28 @@
                         <div class="modal-body">
                             <div>
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Title</label>
+                                    <label for="inputTitle">Title</label>
                                     <input class="form-control" id="input-title" placeholder="Enter Title">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">URL</label>
+                                    <label for="inputURL">URL</label>
                                     <input class="form-control" id="input-url" placeholder="Enter URL">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Price</label>
+                                    <label for="inputPrice">Price</label>
                                     <input class="form-control" id="input-price" placeholder="Enter Price">
                                 </div>
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Priority</label>
+<!--                                <div class="form-group">
+                                    <label for="inputPriority">Priority</label>
                                     <input class="form-control" id="input-priority" placeholder="Enter Priority">
+                                </div>-->
+                                <div class="form-group">
+                                    <label for="inputPriority">Priority</label>
+                                    <select class="form-control" id="input-priority">
+                                        <option>High</option>
+                                        <option>Medium</option>
+                                        <option>Low</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -91,7 +77,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!--Delete Modal -->
             <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -107,7 +93,7 @@
                                 <span id="delete-modal-description">
                                     Are you sure you want to delete 
                                     <span id="delete-modal-item-title" style="font-weight: bold"></span>
-                                     ?
+                                    ?
                                 </span>
                             </div>
                         </div>
@@ -118,8 +104,8 @@
                     </div>
                 </div>
             </div>
-            
-            
+
+
             <!--Info Modal -->
             <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -142,8 +128,8 @@
                     </div>
                 </div>
             </div>
-            
-            
+
+
 
 
             <div class="container wish-list">

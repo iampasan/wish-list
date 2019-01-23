@@ -20,26 +20,20 @@ var Item = Backbone.Model.extend({
 //Items collection
 var Items = Backbone.Collection.extend({
     url: '/items/itemsByList/1',
-    model: Item
+    model: Item,
+    comparator: function(item) {
+        switch (item.get('priority')) {
+            case 'High':
+                return 1;
+            case 'Medium':
+                return 2;
+            case 'Low':
+                return 3;
+            default:
+                return Infinity;
+        }
+    }
 });
-
-//var item1 = new Item({
-//    id: '1',
-//    title: 'Item1',
-//    url: 'item1url',
-//    list_id: '1',
-//    price: '123',
-//    priority: '1'
-//});
-//
-//var item2 = new Item({
-//    id: '2',
-//    title: 'Item2',
-//    url: 'item1url',
-//    list_id: '1',
-//    price: '123',
-//    priority: '1'
-//});
 
 //Instantiate collection
 var items = new Items();
@@ -96,9 +90,9 @@ var ItemsView = Backbone.View.extend({
                 console.log('Failed to load items!');
             }
         });
-
     },
     render: function() {
+        this.model.sort();
         var self = this;
         this.$el.html(''); //Flush
         _.each(this.model.toArray(), function(item) {
@@ -108,7 +102,7 @@ var ItemsView = Backbone.View.extend({
     }
 });
 
-//Initialize items view
+//Initialize Items View
 var itemsView = new ItemsView();
 
 $(document).ready(function() {
@@ -122,6 +116,7 @@ $(document).ready(function() {
     $('#save-item-btn').on('click', function() {
         var item = new Item();
         item.save(getCurrentModalItem(), {
+            wait: true,
             success: function(model, response) {
                 //Id is the response on this endpoint
                 item.set('id', response);
@@ -137,10 +132,11 @@ $(document).ready(function() {
     $('#update-item-btn').on('click', function() {
         var item = items.get(currentItemId);
         item.save(getCurrentModalItem(), {
+            wait: true,
             success: function() {
                 items.set(item, {remove: false})
             },
-            error: function() { 
+            error: function() {
                 console.log('Failed to update!');
             }
         });
@@ -148,8 +144,16 @@ $(document).ready(function() {
 
     //Clicking the delete button to delete the item
     $('#delete-item-btn').on('click', function() {
-        items.remove(currentItemId);
-        console.log(items.toJSON());
+        var item = items.get(currentItemId);
+        item.destroy({
+            wait: true,
+            success: function() {
+                //items.remove(currentItemId);
+            },
+            error: function() {
+                console.log('Failed to delete item');
+            }
+        });
     });
 
 });
@@ -198,6 +202,6 @@ function clearFeilds() {
     $('#input-title').val('');
     $('#input-url').val('');
     $('#input-price').val('');
-    $('#input-priority').val('');
+    $('#input-priority').val('Medium');
 
 }
