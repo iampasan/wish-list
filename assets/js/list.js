@@ -4,7 +4,7 @@ $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
 });
 
 /*Global Variables*/
-var currentListId = 2;
+var currentListId = 1;
 
 //List Modal
 var List = Backbone.Model.extend({
@@ -84,10 +84,10 @@ var ItemView = Backbone.View.extend({
         'click #delete-item-trigger-btn': 'open_delete'
     },
     open_update: function() {
-        new ItemOperationView({model: this.model}).show();
+        itemOperationsView.show(this.model);
     },
     open_delete: function() {
-        new ItemDeleteView({model: this.model}).show();
+        itemDeleteView.show(this.model);
     },
     render: function() {
         this.$el.html(this.template(this.model.toJSON()));
@@ -123,11 +123,9 @@ var ItemsView = Backbone.View.extend({
 });
 
 var ItemOperationView = Backbone.View.extend({
-    model: new Item(),
     el: $('.item-operation-modal'),
     initialize: function() {
         this.template = _.template($('.item-operation-template').html());
-        this.render();
     },
     render: function() {
         this.$el.html(''); //Flush
@@ -138,7 +136,9 @@ var ItemOperationView = Backbone.View.extend({
         'click #save-item-btn': 'save',
         'click #update-item-btn': 'update'
     },
-    show: function() {
+    show: function(new_model) {
+        this.model = new_model;
+        this.render();
         if (!this.model.get('id')) {
             //No ID means adding new item
             this.$('#itemModalLabel').html('Add Item');
@@ -159,17 +159,7 @@ var ItemOperationView = Backbone.View.extend({
         $('#itemModal').modal('show');
     },
     hide: function() {
-        var self = this;
         $('#itemModal').modal('hide');
-        setTimeout(function() {
-            self.destroy();
-        }, 500);
-    },
-    destroy: function() {
-        console.log('Destroying..');
-        this.undelegateEvents();
-        this.$el.removeData().unbind();
-        this.$el.empty();
     },
     save: function() {
         var self = this;
@@ -211,7 +201,6 @@ var ItemDeleteView = Backbone.View.extend({
     el: $('.item-operation-modal'),
     initialize: function() {
         this.template = _.template($('.item-delete-template').html());
-        this.render();
     },
     render: function() {
         this.$el.html(''); //Flush
@@ -221,20 +210,14 @@ var ItemDeleteView = Backbone.View.extend({
     events: {
         'click #delete-item-btn': 'delete',
     },
-    show: function() {
+    show: function(new_model) {
+        this.model = new_model;
+        this.render();
         $('#deleteModal').modal('show');
     },
     hide: function() {
         var self = this;
         $('#deleteModal').modal('hide');
-        setTimeout(function() {
-            self.destroy();
-        }, 500);
-    },
-    destroy: function() {
-        this.undelegateEvents();
-        this.$el.removeData().unbind();
-        this.$el.empty();
     },
     delete: function() {
         var self = this;
@@ -256,13 +239,14 @@ var ItemDeleteView = Backbone.View.extend({
 
 //Initialize Views
 var itemsView = new ItemsView();
+var itemOperationsView = new ItemOperationView();
 var listDescription = new ListDetailsView();
+var itemDeleteView = new ItemDeleteView();
 
 $(document).ready(function() {
     //Opening Add modal to add item
     $('#item-add-modal-btn').on('click', function() {
-        console.log('Gets here');
-        new ItemOperationView({model: new Item()}).show();
+        itemOperationsView.show(new Item());
     });
 });
 
