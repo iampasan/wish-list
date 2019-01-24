@@ -4,11 +4,11 @@ $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
 });
 
 /*Global Variables*/
-var currentListId = 1;
+var currentListId = 2;
 
 //List Modal
 var List = Backbone.Model.extend({
-    url: '/lists/list',
+    url: '/lists/list/'+currentListId,
     defaults: {
         title: '',
         url: '',
@@ -30,7 +30,7 @@ var Item = Backbone.Model.extend({
 
 //Items collection
 var Items = Backbone.Collection.extend({
-    url: '/items/itemsByList/'+currentListId,
+    url: '/items/itemsByList/' + currentListId,
     model: Item,
     comparator: function(item) {
         switch (item.get('priority')) {
@@ -48,6 +48,29 @@ var Items = Backbone.Collection.extend({
 
 //Instantiate collection
 var items = new Items();
+
+//Backbone view list details
+var ListDetailsView = Backbone.View.extend({
+    model: new List(),
+    el: $('.list-details-container'),
+    initialize: function() {
+        this.template = _.template($('.list-details-template').html());
+        var self = this;
+        this.model.fetch({
+            success: function() {
+                self.render();
+                console.log('Succeessfully loaded!');
+            },
+            error: function() {
+                console.log('Failed to load items!');
+            }
+        });
+    },
+    render: function() {
+        this.$el.html(this.template(this.model.toJSON()));
+        return this;
+    }
+});
 
 //Backbone View single Item
 var ItemView = Backbone.View.extend({
@@ -143,6 +166,7 @@ var ItemOperationView = Backbone.View.extend({
         }, 500);
     },
     destroy: function() {
+        console.log('Destroying..');
         this.undelegateEvents();
         this.$el.removeData().unbind();
         this.$el.empty();
@@ -230,8 +254,9 @@ var ItemDeleteView = Backbone.View.extend({
     }
 });
 
-//Initialize Items View
+//Initialize Views
 var itemsView = new ItemsView();
+var listDescription = new ListDetailsView();
 
 $(document).ready(function() {
     //Opening Add modal to add item
@@ -250,7 +275,7 @@ function getCurrentModalItem() {
         url: $('#input-url').val(),
         price: $('#input-price').val(),
         priority: $('#input-priority').val(),
-        list_id: 1
+        list_id: currentListId
     };
     return item;
 }
