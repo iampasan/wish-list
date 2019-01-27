@@ -1,6 +1,5 @@
 <div class="container" id="signin-container">
     <form class="form-signin mx-auto  needs-validation" id="sign-in-form" style="width:20rem;margin-top:10rem;" novalidate>
-        <?php //echo form_open('auth', 'class="form-signin mx-auto text-center" style="width:20rem;margin-top:10rem;"');?>
         <h2 class="form-signin-heading text-center">Wish List</h2>
         <label for="inputEmail" class="sr-only">User name :</label>
         <input type="text" id="input-username" name="username" class="form-control" placeholder="Username" required autofocus>
@@ -14,7 +13,6 @@
         </div>
         <button class="btn btn-lg btn-primary btn-block mt-4" id="login-btn">Sign in</button>
         <small class="mt-1"><a class="text-light text-center" href="http://localhost/wish-list/register">Not a user? Register Now!</a></small>
-        <!--<p class='mt-2 text-danger'><?php //echo $errmsg      ?></p>-->
     </form>
 </div>
 

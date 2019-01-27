@@ -20,8 +20,8 @@ $(document).ready(function() {
                     console.log(["Login success: ", response]);
 //                    localStorage.setItem("wl_username", response.username);
 //                    localStorage.setItem("wl_list_id", response.list_id);
-                    $.cookie('wl_username', response.username);
-                    $.cookie('wl_list_id', response.list_id);
+                    // $.cookie('wl_username', response.username);
+                    // $.cookie('wl_list_id', response.list_id);
                     window.location.href = "http://localhost/wish-list/";
                 },
                 error: function(response) {
@@ -35,7 +35,6 @@ $(document).ready(function() {
 
 function validateForm() {
     if($('#input-username').val()== "" || $('#input-username').val() == ""){
-        console.log("form invalid");
         document.getElementById("sign-in-form").classList.add("was-validated");
         return false;
     }

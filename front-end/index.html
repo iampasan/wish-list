@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>List View</title>
+
+    <!--JQuery -->
+    <script src="assets/js/lib/jquery-3.3.1.min.js"></script>
+
+    <!--UnderScore JS-->
+    <script src="assets/js/lib/underscore-min.js"></script>
+
+    <!--Backbone JS -->
+    <script src="assets/js/lib/backbone-min.js"></script>
+
+    <!--Jquery Cookie lirary-->
+    <script src="assets/js/lib/jquery.cookie.js"></script>
+
+    <!--Jquery Toaster-->
+    <script src="assets/js/lib/jquery.toaster.js"></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+        crossorigin="anonymous">
+
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+
+    <!--Config-->
+    <script src="assets/js/config.js"></script>
+
+
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Wish List</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <button style="display:none" class="btn btn-outline-primary my-2 my-sm-0">Logout</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="content">
+
+    </div>
+</body>
+
+<!--Templates-->
+
+<script type="text/template" id="login-template">
+    <div class="container" id="signin-container">
+        <form class="form-signin mx-auto  needs-validation" id="sign-in-form" style="width:20rem;margin-top:10rem;" novalidate>
+            <h2 class="form-signin-heading text-center">Sign In</h2>
+            <label for="inputEmail" class="sr-only">User name :</label>
+            <input type="text" id="input-username" name="username" class="form-control" placeholder="Username" required autofocus>
+            <div class="invalid-feedback">
+                Please enter username!
+            </div>
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input type="password" id="input-password" name="password" id="inputPassword" class="form-control mt-2" placeholder="Password" required>
+            <div class="invalid-feedback">
+                Please enter password!
+            </div>
+            <button class="btn btn-lg btn-primary btn-block mt-4" id="login-btn">Sign in</button>
+            <small class="mt-1"><a class="" href="#register">Not a user? Register Now!</a></small>
+        </form>
+    </div>
+</script>
+
+
+<!--Backbone app files-->
+<script src="assets/js/user_admission.js"></script>
+<script src="assets/js/app.js"></script>
+
+
+
+</html>
