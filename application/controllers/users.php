@@ -24,24 +24,63 @@ class Users extends REST_Controller {
         if (!$username || !$password) {
 
             $this->response("Login information missing", 400);
-            
         } else {
 
             $user = $this->user_model->validateUser($username, $password);
 
             if (empty($user)) {
-                 $this->response("Username or password does not match, please try again.", 400);
+                $this->response("Username or password does not match, please try again.", 400);
             } else {
-                
+
                 $list = $this->list_model->getListByUser($username);
-                
+
                 $response["username"] = $username;
-                
+
                 $response["list_id"] = $list['id'];
-                
+
                 $this->response($response, 200);
-                
             }
+        }
+    }
+
+    function register_post() {
+
+        $username = $this->post('username');
+
+        $password = $this->post('password');
+        
+        $name = $this->post('name');
+        
+        $list_name = $this->post('list_name');
+        
+        $list_description = $this->post('list_description');
+        
+
+        if ($this->user_model->userExists($username)) {
+
+            $this->response("Username not available!", 400);
+        } else {
+            
+            $user['username'] = $username;
+            $user['password'] = $password;
+            $user['name'] = $name;
+            $list['name'] = $list_name;
+            $list['description'] = $list_description;
+            $list['owner'] = $username;
+            
+            $user_register = $this->user_model->addUser($user);
+            $list_creation = $this->list_model->createList($list);            
+            
+            
+            if($user_register && $list_creation){
+                $response["username"] = $username;
+                $response["list_id"] = $this->list_model->getListByUser($username)['id'];
+                
+                 $this->response($response, 200);
+            }else{
+               $this->response("An error occured! Please try again!".$user_register."+".$list_creation, 400);
+            }
+
         }
     }
 

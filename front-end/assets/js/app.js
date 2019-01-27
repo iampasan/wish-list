@@ -8,30 +8,38 @@ var AppRouter = Backbone.Router.extend({
         "view-list/:list_id": "viewList"
     },
 
-    initialize: function(){
+    initialize: function () {
         this.loginView = new LoginView();
+        this.registerView = new RegisterView();
     },
 
-    list:function(){
-        $('#content').html('Load the list');
+    list: function () {
+        if (localStorage.getItem('wl_username') && localStorage.getItem('wl_list_id')) {
+
+        } else {
+            Backbone.history.navigate("/login", { trigger: true });
+        }
     },
 
-    login:function(){
+    login: function () {
         this.loginView.render();
     },
 
-    register:function(){
-        $('#content').html('Load login page');
+    register: function () {
+        this.registerView.render();
     },
 
-    viewList:function(list_id){
+    viewList: function (list_id) {
         $('#content').html('ViewList' + list_id);
     }
 });
 
+
+
+
 var router = new AppRouter();
 
-$(function(){
+$(function () {
     Backbone.history.start();
 });
 

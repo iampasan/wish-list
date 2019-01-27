@@ -81,6 +81,77 @@
 </script>
 
 
+<script type="text/template" id="register-template">
+    <div class="container">
+        <form class="form-signin mx-auto  needs-validation" id="sign-in-form" style="width:20rem;margin-top:10rem;" novalidate>
+            <h2 class="form-signin-heading text-center">Sign Up</h2>
+
+            <label for="input-username" class="sr-only">Pick a username :</label>
+            <input type="text" id="input-username" name="username" class="form-control" placeholder="Username" required autofocus>
+            <div class="invalid-feedback username-feedback">
+                Please enter a username!
+            </div>
+
+            <label for="inputEmail" class="sr-only">Enter your name :</label>
+            <input type="text" id="input-name" name="username" class="form-control mt-2" placeholder="Name" required autofocus>
+            <div class="invalid-feedback username-feedback">
+                Please enter your name!
+            </div>
+
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input type="password" id="input-password" name="password" id="inputPassword" class="form-control mt-2" placeholder="Password" required>
+            <div class="invalid-feedback">
+                Please enter a password!
+            </div>
+
+            <label for="inputPassword" class="sr-only">Confirm password</label>
+            <input type="password" id="input-confirm-password" name="password" id="input-confirm-password" class="form-control mt-2" placeholder="Confirm Password" required>
+            <div class="invalid-feedback confirm-pw-feedback">
+                Please confirm password!
+            </div>
+
+            <label for="listname" class="sr-only">List name :</label>
+            <input type="text" id="input-list-name" name="listname" class="form-control mt-2" placeholder="List Name" required autofocus>
+            <div class="invalid-feedback">
+                Please enter a list name!
+            </div>
+
+            <label for="listname" class="sr-only">List description :</label>
+            <textarea id="input-list-description" class="form-control mt-2" placeholder="List Description" required autofocus></textarea>
+            <div class="invalid-feedback">
+                Please enter a list description!
+            </div>
+
+
+            <button class="btn btn-lg btn-primary btn-block mt-4" id="register-btn">Sign Up</button>
+            <small class="mt-1"><a class="" href="#register">Already registered? Login Now!</a></small>
+        </form>
+    </div>
+</script>
+
+
+
+<script type="text/template" id="list-template">
+    <div class="list-details-container"></div>
+    <div class="list-container"></div>
+</script>
+
+<script type="text/template" id="list-details-template">
+    <div class="jumbotron jumbotron-fluid">
+        <button type="button" class="btn btn-outline-danger mt-1 mr-1 float-right" id="logout-btn">Logout</button>
+        <div class="container-fluid">
+            <h1 class="display-4">
+                <%= name %>
+            </h1>
+            <p class="lead">
+                <%= description %>.</p>
+        </div>
+    </div>
+</script>
+
+
+
+
 <!--Backbone app files-->
 <script src="assets/js/user_admission.js"></script>
 <script src="assets/js/app.js"></script>

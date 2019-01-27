@@ -1,31 +1,33 @@
 var requestUrl = "http://localhost/wish-list/users";
 
-$(document).ready(function() {
+$(document).ready(function () {
 
-    $('#login-btn').on('click', function() {
+    $('#login-btn').on('click', function () {
         event.preventDefault(); // Prevent submitting form
         var userDetails = {
             username: $('#input-username').val(),
             password: $('#input-password').val()
         };
 
-        if (validateForm()){
+        if ($('#input-username').val() == "" || $('#input-username').val() == "") {
+            document.getElementById("sign-in-form").classList.add("was-validated");
+        } else {
             $.ajax({
                 url: requestUrl + "/login",
                 type: 'POST',
                 crossDomain: true,
                 dataType: "json",
                 data: userDetails,
-                success: function(response) {
+                success: function (response) {
                     console.log(["Login success: ", response]);
-//                    localStorage.setItem("wl_username", response.username);
-//                    localStorage.setItem("wl_list_id", response.list_id);
+                    //                    localStorage.setItem("wl_username", response.username);
+                    //                    localStorage.setItem("wl_list_id", response.list_id);
                     // $.cookie('wl_username', response.username);
                     // $.cookie('wl_list_id', response.list_id);
                     window.location.href = "http://localhost/wish-list/";
                 },
-                error: function(response) {
-                    $.toaster({ priority : 'danger', title : 'Error', message : response.responseText});
+                error: function (response) {
+                    $.toaster({ priority: 'danger', title: 'Error', message: response.responseText });
                     console.log(["Login failed: ", response]);
                 }
             });
@@ -34,7 +36,7 @@ $(document).ready(function() {
 });
 
 function validateForm() {
-    if($('#input-username').val()== "" || $('#input-username').val() == ""){
+    if ($('#input-username').val() == "" || $('#input-username').val() == "") {
         document.getElementById("sign-in-form").classList.add("was-validated");
         return false;
     }

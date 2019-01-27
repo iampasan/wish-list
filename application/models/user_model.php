@@ -41,12 +41,11 @@ class User_model extends CI_Model {
         return $query->row_array();
     }
 
-    //Add new item
+    //Add new user
     public function addUser($data) {
 
-        $this->db->insert('item', $data);
+        return $this->db->insert('user', $data);
 
-        return $this->db->insert_id();
     }
 
 }
