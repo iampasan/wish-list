@@ -56,7 +56,8 @@ var MainView = Backbone.View.extend({
     el: $('#content'),
     template: _.template($('#main-template').html()),
     items: new Items(),
-    owenerView: true,
+    isOwner: true,
+    ownerDetails: {},
     initialize: function () {
         this.listDetailsView = new ListDetailsView({ parent: this });
         this.itemsView = new ItemsView({ model: this.items, parent: this });
@@ -70,15 +71,23 @@ var MainView = Backbone.View.extend({
     open_add() {
         this.itemOperationsView.show(new Item());
     },
-    render: function () {
-        currentListId = localStorage.getItem('wl_list_id');
+    render: function (shareDetails) {
+        if (shareDetails) {
+            this.isOwner = false;
+            this.ownerDetails = shareDetails;
+            currentListId = this.ownerDetails.list_id;
+        } else {
+            currentListId = localStorage.getItem('wl_list_id');
+            this.isOwner = true;
+            this.ownerDetails = {}
+        }
         this.itemsView.updateModel();
         this.listDetailsView.updateModel();
-        this.$el.html(this.template());
+        var main_model = { isOwner: this.isOwner };
+        this.$el.html(this.template(main_model));
         this.$('.list-details-container').html(this.listDetailsView.$el);
-        this.$('#list-table') > $( "#items-list").remove();
+        this.$('#list-table') > $("#items-list").remove();
         this.$('#list-table').append(this.itemsView.$el);
-        //this.$('.items-list').setElement(this.itemsView.$el);
         return this;
     },
 });
@@ -86,13 +95,14 @@ var MainView = Backbone.View.extend({
 //Backbone view list details
 var ListDetailsView = Backbone.View.extend({
     model: new List(),
-    initialize: function () {
+    initialize: function (options) {
+        this.parent = options.parent;
         this.template = _.template($('#list-details-template').html());
     },
     events: {
         'click #share-btn': 'shareClick'
     },
-    shareClick(){
+    shareClick() {
         console.log(config);
         var username = localStorage.getItem("wl_username");
         var viewLink = config.frontEndBaseUrl + "/view/"
@@ -124,7 +134,10 @@ var ListDetailsView = Backbone.View.extend({
         });
     },
     render: function () {
-        this.$el.html(this.template(this.model.toJSON()));
+        var listDetailsModal = this.model.toJSON();
+        listDetailsModal.isOwner = this.parent.isOwner;
+        listDetailsModal.ownerDetails = this.parent.ownerDetails;
+        this.$el.html(this.template(listDetailsModal));
         return this;
     }
 });
@@ -138,12 +151,15 @@ var ItemsView = Backbone.View.extend({
         this.model.bind('add change remove', this.render, this);
     },
     updateModel() {
+        var self = this;
         this.model.fetch({
             success: function (response) {
                 console.log(response);
                 console.log('Succeessfully loaded!');
+                self.render();
             },
             error: function () {
+                self.render();
                 console.log('Failed to load items!');
             }
         });
@@ -152,9 +168,13 @@ var ItemsView = Backbone.View.extend({
         this.model.sort();
         var self = this;
         this.$el.html(''); //Flush
-        _.each(this.model.toArray(), function (item) {
-            self.$el.append((new ItemView({ model: item, parent: self.parent })).render().$el);
-        });
+        if (this.model.toArray().length == 0) {
+            self.$el.html('<tr><td colspan = 5><h4 class="text-center">The list is empty!</h3></td></tr>');
+        } else {
+            _.each(this.model.toArray(), function (item) {
+                self.$el.append((new ItemView({ model: item, parent: self.parent })).render().$el);
+            });
+        }
         return this;
     }
 });
@@ -178,7 +198,9 @@ var ItemView = Backbone.View.extend({
         this.parent.itemDeleteView.show(this.model);
     },
     render: function () {
-        this.$el.html(this.template(this.model.toJSON()));
+        var viewItemModel = this.model.toJSON();
+        viewItemModel.isOwner = this.parent.isOwner;
+        this.$el.html(this.template(viewItemModel));
         return this;
     }
 });
@@ -334,7 +356,7 @@ function clearOperationFeilds() {
     $('#input-priority').val('Medium');
 }
 
-function copyToClipboard(text){
+function copyToClipboard(text) {
     console.log("called");
     var dummy = document.createElement("input");
     document.body.appendChild(dummy);

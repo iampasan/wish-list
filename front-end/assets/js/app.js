@@ -23,13 +23,23 @@ var AppRouter = Backbone.Router.extend({
     },
 
     login: function () {
-        $('#log-out-btn').hide();
-        this.loginView.render();
+        if (localStorage.getItem('wl_username') && localStorage.getItem('wl_list_id')) {
+            console.log('Yo');
+            Backbone.history.navigate("/", { trigger: true });
+        } else {
+            $('#log-out-btn').hide();
+            this.loginView.render();
+        }
+
     },
 
     register: function () {
-        $('#log-out-btn').hide();
-        this.registerView.render();
+        if (localStorage.getItem('wl_username') && localStorage.getItem('wl_list_id')) {
+            Backbone.history.navigate("/", { trigger: true });
+        } else {
+            $('#log-out-btn').hide();
+            this.registerView.render();
+        }
     },
 
     viewList: function (share_id) {
@@ -41,16 +51,14 @@ var AppRouter = Backbone.Router.extend({
             crossDomain: true,
             success: function (response) {
                 console.log(response);
-                self.mainView.render();
+                self.mainView.render(response);
             },
             error: function (response) {
-                $.toaster({ priority: 'danger', title: 'Error!', message:reponse });
+                $.toaster({ priority: 'danger', title: 'Error!', message:response });
             }
         });
     }
 });
-
-
 
 
 var router = new AppRouter();

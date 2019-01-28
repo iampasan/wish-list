@@ -24,6 +24,12 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
         crossorigin="anonymous">
 
+    <!-- FontAwesome CSS -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+    <!--Custom Css-->
+    <link rel="stylesheet" href="assets/css/style.css">
+
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
         crossorigin="anonymous"></script>
@@ -126,9 +132,8 @@
                 Please enter a list description!
             </div>
 
-
             <button class="btn btn-lg btn-primary btn-block mt-4" id="register-btn">Sign Up</button>
-            <small class="mt-1"><a class="" href="#register">Already registered? Login Now!</a></small>
+            <small class="mt-1"><a class="" href="#login">Already registered? Login Now!</a></small>
         </form>
     </div>
 </script>
@@ -139,9 +144,11 @@
     <div class="list-details-container"></div>
     <div class="container-fluid wish-list">
         <!-- Button trigger modal -->
+        <% if (isOwner) { %> 
         <button type="button" class="btn btn-primary mb-3" id="item-add-modal-btn" data-toggle="modal" data-target="#itemModal">
-            Add Item
+            Add Item <i class="fas fa-plus-circle ml-1"></i>
         </button>
+        <% } %> 
 
         <table class="table" id="list-table">
             <thead class="thead-dark">
@@ -160,14 +167,20 @@
 </script>
 
 <script type="text/template" id="list-details-template">
-    <div class="jumbotron jumbotron-fluid">
+    <div class="jumbotron jumbotron-fluid main-jumbotron">
         <div class="container-fluid">
             <h1 class="display-4">
                 <%= name %>
             </h1>
             <p class="lead">
                 <%= description %>.</p>
-                <button type="button" class="btn btn-outline-primary" id="share-btn">Share List</button>
+                <% if (isOwner) { %>   
+                    <button type="button" class="btn btn-outline-primary" id="share-btn">Share List
+                            <i class="fas fa-share-alt ml-1"></i>
+                    </button>
+                <% } else {%>
+                    <p>Owner : <%= ownerDetails.owner_name %></p>
+                <% }%>
         </div>
     </div>
 </script>
@@ -179,9 +192,9 @@
         </span>
     </td>
     <td>
-        <span class="url">
+        <a href="<%= url %>" class="url" target="_blank">
             <%= url %>
-        </span>
+        </a>
     </td>
     <td>
         <span class="price">
@@ -193,9 +206,11 @@
             <%= priority %>
         </span>
     </td>
-    <td>
-        <button class="btn btn-primary" id="update-item-trigger-btn">Edit</button>
-        <button class="btn btn-danger" id="delete-item-trigger-btn">Delete</button>
+    <td >
+        <% if (isOwner) { %>    
+            <button class="btn btn-primary" id="update-item-trigger-btn">Edit<i class="far fa-edit ml-2"></i></button>
+            <button class="btn btn-danger" id="delete-item-trigger-btn"><i class="far fa-trash-alt"></i></button>
+        <% } %>
     </td>
 </script>
 
@@ -240,11 +255,11 @@
                     </div>
                     <div class="form-group">
                         <label for="inputURL">URL</label>
-                        <input class="form-control" id="input-url" placeholder="Enter URL">
+                        <input type="url" class="form-control" id="input-url" placeholder="Enter URL">
                     </div>
                     <div class="form-group">
                         <label for="inputPrice">Price</label>
-                        <input class="form-control" id="input-price" placeholder="Enter Price">
+                        <input type="number" class="form-control" id="input-price" placeholder="Enter Price">
                     </div>
                     <div class="form-group">
                         <label for="inputPriority">Priority</label>
