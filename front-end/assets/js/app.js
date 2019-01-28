@@ -11,11 +11,12 @@ var AppRouter = Backbone.Router.extend({
     initialize: function () {
         this.loginView = new LoginView();
         this.registerView = new RegisterView();
+        this.mainView = new MainView();
     },
 
     list: function () {
         if (localStorage.getItem('wl_username') && localStorage.getItem('wl_list_id')) {
-
+            this.mainView.render();
         } else {
             Backbone.history.navigate("/login", { trigger: true });
         }
