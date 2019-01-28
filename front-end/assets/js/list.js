@@ -56,6 +56,7 @@ var MainView = Backbone.View.extend({
     el: $('#content'),
     template: _.template($('#main-template').html()),
     items: new Items(),
+    owenerView: true,
     initialize: function () {
         this.listDetailsView = new ListDetailsView({ parent: this });
         this.itemsView = new ItemsView({ model: this.items, parent: this });
@@ -75,7 +76,9 @@ var MainView = Backbone.View.extend({
         this.listDetailsView.updateModel();
         this.$el.html(this.template());
         this.$('.list-details-container').html(this.listDetailsView.$el);
-        this.$('.items-list').html(this.itemsView.$el);
+        this.$('#list-table') > $( "#items-list").remove();
+        this.$('#list-table').append(this.itemsView.$el);
+        //this.$('.items-list').setElement(this.itemsView.$el);
         return this;
     },
 });
@@ -85,6 +88,28 @@ var ListDetailsView = Backbone.View.extend({
     model: new List(),
     initialize: function () {
         this.template = _.template($('#list-details-template').html());
+    },
+    events: {
+        'click #share-btn': 'shareClick'
+    },
+    shareClick(){
+        console.log(config);
+        var username = localStorage.getItem("wl_username");
+        var viewLink = config.frontEndBaseUrl + "/view/"
+        $.ajax({
+            url: listRequestUrl + "/getShareLink/" + username,
+            type: 'GET',
+            crossDomain: true,
+            success: function (response) {
+                var shareLink = viewLink + response;
+                copyToClipboard(shareLink);
+                $.toaster({ priority: 'success', title: 'Shared!', message: 'Share link copied to clipboard!' });
+            },
+            error: function (response) {
+                $.toaster({ priority: 'danger', title: 'Error', message: 'Error creating link! Try again!' });
+                console.log(["Login failed: ", response]);
+            }
+        });
     },
     updateModel() {
         var self = this;
@@ -106,6 +131,8 @@ var ListDetailsView = Backbone.View.extend({
 
 var ItemsView = Backbone.View.extend({
     model: new Items(),
+    tagName: 'tbody',
+    className: 'items-list',
     initialize: function (options) {
         this.parent = options.parent;
         this.model.bind('add change remove', this.render, this);
@@ -122,7 +149,6 @@ var ItemsView = Backbone.View.extend({
         });
     },
     render: function () {
-        console.log('Rendering')
         this.model.sort();
         var self = this;
         this.$el.html(''); //Flush
@@ -306,4 +332,14 @@ function clearOperationFeilds() {
     $('#input-url').val('');
     $('#input-price').val('');
     $('#input-priority').val('Medium');
+}
+
+function copyToClipboard(text){
+    console.log("called");
+    var dummy = document.createElement("input");
+    document.body.appendChild(dummy);
+    dummy.setAttribute('value', text);
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
 }

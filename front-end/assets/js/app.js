@@ -4,7 +4,7 @@ var AppRouter = Backbone.Router.extend({
         "": "list",
         "login": "login",
         "register": "register",
-        "view-list/:list_id": "viewList"
+        "view/:list_id": "viewList"
     },
 
     initialize: function () {
@@ -32,8 +32,21 @@ var AppRouter = Backbone.Router.extend({
         this.registerView.render();
     },
 
-    viewList: function (list_id) {
-        $('#content').html('ViewList' + list_id);
+    viewList: function (share_id) {
+        $('#log-out-btn').hide();
+        var self = this;
+        $.ajax({
+            url: listRequestUrl + "/getShareDetails/" + share_id,
+            type: 'GET',
+            crossDomain: true,
+            success: function (response) {
+                console.log(response);
+                self.mainView.render();
+            },
+            error: function (response) {
+                $.toaster({ priority: 'danger', title: 'Error!', message:reponse });
+            }
+        });
     }
 });
 
