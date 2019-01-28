@@ -105,15 +105,17 @@ var ListDetailsView = Backbone.View.extend({
     shareClick() {
         console.log(config);
         var username = localStorage.getItem("wl_username");
-        var viewLink = config.frontEndBaseUrl + "/view/"
+        var viewLink = config.frontEndBaseUrl + "/#view/"
+        var self = this;
         $.ajax({
             url: listRequestUrl + "/getShareLink/" + username,
             type: 'GET',
             crossDomain: true,
             success: function (response) {
                 var shareLink = viewLink + response;
-                copyToClipboard(shareLink);
-                $.toaster({ priority: 'success', title: 'Shared!', message: 'Share link copied to clipboard!' });
+                self.$('#share-url-p').text('Share Link : ' + shareLink);
+                $.toaster({ priority: 'success', title: 'Shared!', message: 'List Shared!' });
+
             },
             error: function (response) {
                 $.toaster({ priority: 'danger', title: 'Error', message: 'Error creating link! Try again!' });
@@ -159,8 +161,9 @@ var ItemsView = Backbone.View.extend({
                 self.render();
             },
             error: function () {
-                self.render();
                 console.log('Failed to load items!');
+                self.model = new Items();
+                self.render();
             }
         });
     },
@@ -248,37 +251,41 @@ var ItemOperationView = Backbone.View.extend({
     },
     save: function () {
         var self = this;
-        self.model.save(getCurrentModalItem(), {
-            wait: true,
-            success: function (model, response) {
-                //Id is the response on this endpoint
-                self.model.set('id', response);
-                self.parent.items.add(self.model);
-            },
-            error: function () {
-                console.log('Failed to post');
-            }
-        }).always(
-            function () {
-                self.hide();
-            }
-        );
+        if (getCurrentModalItem()) {
+            self.model.save(getCurrentModalItem(), {
+                wait: true,
+                success: function (model, response) {
+                    //Id is the response on this endpoint
+                    self.model.set('id', response);
+                    self.parent.items.add(self.model);
+                },
+                error: function () {
+                    console.log('Failed to post');
+                }
+            }).always(
+                function () {
+                    self.hide();
+                }
+            );
+        }
     },
     update: function () {
         var self = this;
-        this.model.save(getCurrentModalItem(), {
-            wait: true,
-            success: function () {
-                console.log('Updated successfully');
-            },
-            error: function () {
-                console.log('Failed to update!');
-            }
-        }).always(
-            function () {
-                self.hide();
-            }
-        );
+        if (getCurrentModalItem()) {
+            this.model.save(getCurrentModalItem(), {
+                wait: true,
+                success: function () {
+                    console.log('Updated successfully');
+                },
+                error: function () {
+                    console.log('Failed to update!');
+                }
+            }).always(
+                function () {
+                    self.hide();
+                }
+            );
+        }
     }
 });
 
@@ -325,14 +332,30 @@ var ItemDeleteView = Backbone.View.extend({
 /*-----Helper Methods-----*/
 
 function getCurrentModalItem() {
-    var item = {
-        title: $('#input-title').val(),
-        url: $('#input-url').val(),
-        price: $('#input-price').val(),
-        priority: $('#input-priority').val(),
-        list_id: currentListId
-    };
-    return item;
+
+    var title = $('#input-title').val();
+    var url = $('#input-url').val();
+    var price = $('#input-price').val();
+    var priority = $('#input-priority').val();
+
+    if (title == ""
+        || url == ""
+        || price == ""
+        || priority == ""
+    ) {
+        document.getElementById("#add-item-form").classList.add("was-validated");
+        return false;
+    } else {
+
+        var item = {
+            title: title,
+            url: url,
+            price: price,
+            priority: priority,
+            list_id: currentListId
+        };
+        return item;
+    }
 }
 
 function displayInfo(title, message) {
@@ -356,12 +379,20 @@ function clearOperationFeilds() {
     $('#input-priority').val('Medium');
 }
 
-function copyToClipboard(text) {
-    console.log("called");
-    var dummy = document.createElement("input");
-    document.body.appendChild(dummy);
-    dummy.setAttribute('value', text);
-    dummy.select();
-    document.execCommand("copy");
-    document.body.removeChild(dummy);
-}
+// function copyToClipboard(text) {
+//     console.log("called");
+//     var dummy = document.createElement("input");
+//     document.body.appendChild(dummy);
+//     dummy.setAttribute('value', text);
+//     dummy.select();
+//     document.execCommand("copy");
+//     document.body.removeChild(dummy);
+// }
+
+// function copyToClipboard(val) {
+//     var $temp = $("<input>");
+//     $("body").append($temp);
+//     $temp.val(val).select();
+//     document.execCommand("copy");
+//     $temp.remove();
+// }

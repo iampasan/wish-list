@@ -66,14 +66,12 @@ var RegisterView = Backbone.View.extend({
         var username = $('#input-username').val();
         var password = $('#input-password').val();
         var name = $('#input-name').val();
-        var confirm_password = $('#input-confirm-password').val();
         var list_name = $('#input-list-name').val();
         var list_description = $('#input-list-description').val();
 
         if (username == "" 
          || password == ""
          || name == ""
-         || confirm_password == ""
          || list_name == ""
          || list_description == ""
          ) {
@@ -97,7 +95,6 @@ var RegisterView = Backbone.View.extend({
                 dataType: "json",
                 data: registerDetails,
                 success: function (response) {
-                    console.log(["Register success: ", response]);
                     localStorage.setItem("wl_username", response.username);
                     localStorage.setItem("wl_list_id", response.list_id);
                     Backbone.history.navigate("/", { trigger: true });

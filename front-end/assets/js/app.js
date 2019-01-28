@@ -24,7 +24,6 @@ var AppRouter = Backbone.Router.extend({
 
     login: function () {
         if (localStorage.getItem('wl_username') && localStorage.getItem('wl_list_id')) {
-            console.log('Yo');
             Backbone.history.navigate("/", { trigger: true });
         } else {
             $('#log-out-btn').hide();
@@ -73,5 +72,8 @@ $( document ).ready(function() {
         localStorage.clear();
         Backbone.history.navigate("#login", { trigger: true });
     });
-
+    $('#btn-share-link').on('click', function() {
+        alert("hii");
+    });
+    
 });

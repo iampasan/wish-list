@@ -25,7 +25,8 @@
         crossorigin="anonymous">
 
     <!-- FontAwesome CSS -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
+        crossorigin="anonymous">
 
     <!--Custom Css-->
     <link rel="stylesheet" href="assets/css/style.css">
@@ -42,6 +43,10 @@
 </head>
 
 <body>
+    <input id="share-link" value="initial" style="display: none;">
+    <button class="btn btn-share-link" id="btn-share-link" data-clipboard-target="#share-link">
+    </button>
+
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Wish List</a>
@@ -114,12 +119,6 @@
                 Please enter a password!
             </div>
 
-            <label for="inputPassword" class="sr-only">Confirm password</label>
-            <input type="password" id="input-confirm-password" name="password" id="input-confirm-password" class="form-control mt-2" placeholder="Confirm Password" required>
-            <div class="invalid-feedback confirm-pw-feedback">
-                Please confirm password!
-            </div>
-
             <label for="listname" class="sr-only">List name :</label>
             <input type="text" id="input-list-name" name="listname" class="form-control mt-2" placeholder="List Name" required autofocus>
             <div class="invalid-feedback">
@@ -178,6 +177,7 @@
                     <button type="button" class="btn btn-outline-primary" id="share-btn">Share List
                             <i class="fas fa-share-alt ml-1"></i>
                     </button>
+                    <p class="mt-2" id="share-url-p"></p>
                 <% } else {%>
                     <p>Owner : <%= ownerDetails.owner_name %></p>
                 <% }%>
@@ -248,18 +248,28 @@
                 </button>
             </div>
             <div class="modal-body">
+            <form id="#add-item-form">
                 <div>
                     <div class="form-group">
                         <label for="inputTitle">Title</label>
-                        <input class="form-control" id="input-title" placeholder="Enter Title">
+                        <input class="form-control" id="input-title" placeholder="Enter Title" required>
+                        <div class="invalid-feedback username-feedback">
+                                Please enter Title!
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="inputURL">URL</label>
-                        <input type="url" class="form-control" id="input-url" placeholder="Enter URL">
+                        <input type="url" class="form-control" id="input-url" placeholder="Enter URL" required>
+                        <div class="invalid-feedback username-feedback">
+                                Please enter URL!
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="inputPrice">Price</label>
-                        <input type="number" class="form-control" id="input-price" placeholder="Enter Price">
+                        <input type="number" class="form-control" id="input-price" placeholder="Enter Price" required>
+                        <div class="invalid-feedback username-feedback">
+                                Please enter price!
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="inputPriority">Priority</label>
@@ -276,6 +286,7 @@
                 <button id="save-item-btn" class="btn btn-primary">Save</button>
                 <button id="update-item-btn" class="btn btn-primary">Update</button>
             </div>
+        </form>
         </div>
     </div>
 </div>
@@ -322,6 +333,7 @@
 <script src="assets/js/user_admission.js"></script>
 <script src="assets/js/list.js"></script>
 <script src="assets/js/app.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
 
 
 
