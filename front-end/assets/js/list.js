@@ -1,11 +1,16 @@
+/*Current List Id*/
+var currentListId;
+
 /* Req URL for list and items controllers*/
 var listRequestUrl = config.apiBaseUrl + '/lists';
 var itemsRequestUrl = config.apiBaseUrl + '/items';
-var currentListId;
 
 //List Modal
 var List = Backbone.Model.extend({
-    url: listRequestUrl + '/list/' + 1,
+    url: function () {
+        console.log(currentListId);
+        return listRequestUrl + '/list/' + currentListId;
+    },
     defaults: {
         title: '',
         url: '',
@@ -27,8 +32,11 @@ var Item = Backbone.Model.extend({
 
 //Items collection
 var Items = Backbone.Collection.extend({
-    url: itemsRequestUrl + '/itemsByList/' + 1,
     model: Item,
+    url: function () {
+        console.log(currentListId);
+        return itemsRequestUrl + '/itemsByList/' + currentListId;
+    },
     comparator: function (item) {
         switch (item.get('priority')) {
             case 'High':
@@ -47,24 +55,24 @@ var Items = Backbone.Collection.extend({
 var MainView = Backbone.View.extend({
     el: $('#content'),
     template: _.template($('#main-template').html()),
-    // list: new List(),
     items: new Items(),
     initialize: function () {
-        //Fetch data
-        currentListId = localStorage.getItem('wl_list_id');
-        this.listDetailsView = new ListDetailsView({parent:this});
-        this.itemsView = new ItemsView({model:this.items,parent:this});
-        this.itemOperationsView = new ItemOperationView({parent:this});
+        this.listDetailsView = new ListDetailsView({ parent: this });
+        this.itemsView = new ItemsView({ model: this.items, parent: this });
+        this.itemOperationsView = new ItemOperationView({ parent: this });
         this.itemDeleteView = new ItemDeleteView();
         var self = this;
     },
     events: {
         'click #item-add-modal-btn': 'open_add'
     },
-    open_add(){
+    open_add() {
         this.itemOperationsView.show(new Item());
     },
     render: function () {
+        currentListId = localStorage.getItem('wl_list_id');
+        this.itemsView.updateModel();
+        this.listDetailsView.updateModel();
         this.$el.html(this.template());
         this.$('.list-details-container').html(this.listDetailsView.$el);
         this.$('.items-list').html(this.itemsView.$el);
@@ -77,6 +85,8 @@ var ListDetailsView = Backbone.View.extend({
     model: new List(),
     initialize: function () {
         this.template = _.template($('#list-details-template').html());
+    },
+    updateModel() {
         var self = this;
         this.model.fetch({
             success: function () {
@@ -99,6 +109,8 @@ var ItemsView = Backbone.View.extend({
     initialize: function (options) {
         this.parent = options.parent;
         this.model.bind('add change remove', this.render, this);
+    },
+    updateModel() {
         this.model.fetch({
             success: function (response) {
                 console.log(response);
@@ -110,6 +122,7 @@ var ItemsView = Backbone.View.extend({
         });
     },
     render: function () {
+        console.log('Rendering')
         this.model.sort();
         var self = this;
         this.$el.html(''); //Flush
@@ -125,7 +138,6 @@ var ItemView = Backbone.View.extend({
     model: new Item(),
     tagName: 'tr',
     initialize: function (options) {
-        console.log(options);
         this.parent = options.parent;
         this.template = _.template($('#item-template').html());
     },
@@ -224,10 +236,10 @@ var ItemOperationView = Backbone.View.extend({
 
 var ItemDeleteView = Backbone.View.extend({
     el: $('.item-operation-modal'),
-    initialize: function() {
+    initialize: function () {
         this.template = _.template($('#item-delete-template').html());
     },
-    render: function() {
+    render: function () {
         this.$el.html(''); //Flush
         this.$el.html(this.template(this.model.toJSON()));
         return this;
@@ -235,28 +247,28 @@ var ItemDeleteView = Backbone.View.extend({
     events: {
         'click #delete-item-btn': 'delete',
     },
-    show: function(new_model) {
+    show: function (new_model) {
         this.model = new_model;
         this.render();
         $('#deleteModal').modal('show');
     },
-    hide: function() {
+    hide: function () {
         $('#deleteModal').modal('hide');
     },
-    delete: function() {
+    delete: function () {
         var self = this;
         this.model.destroy({
             wait: true,
-            success: function() {
+            success: function () {
                 console.log('Removed Successfully!!');
             },
-            error: function() {
+            error: function () {
                 console.log('Failed to delete item');
             }
         }).always(
-                function() {
-                    self.hide();
-                }
+            function () {
+                self.hide();
+            }
         );
     }
 });

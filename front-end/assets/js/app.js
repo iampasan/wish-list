@@ -1,5 +1,4 @@
 /* Backbone Router*/
-
 var AppRouter = Backbone.Router.extend({
     routes: {
         "": "list",
@@ -16,6 +15,7 @@ var AppRouter = Backbone.Router.extend({
 
     list: function () {
         if (localStorage.getItem('wl_username') && localStorage.getItem('wl_list_id')) {
+            $('#log-out-btn').show();
             this.mainView.render();
         } else {
             Backbone.history.navigate("/login", { trigger: true });
@@ -23,10 +23,12 @@ var AppRouter = Backbone.Router.extend({
     },
 
     login: function () {
+        $('#log-out-btn').hide();
         this.loginView.render();
     },
 
     register: function () {
+        $('#log-out-btn').hide();
         this.registerView.render();
     },
 
@@ -44,3 +46,11 @@ $(function () {
     Backbone.history.start();
 });
 
+
+$( document ).ready(function() {
+    $('#log-out-btn').on('click', function() {
+        localStorage.clear();
+        Backbone.history.navigate("#login", { trigger: true });
+    });
+
+});
