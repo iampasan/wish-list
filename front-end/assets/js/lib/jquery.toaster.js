@@ -92,7 +92,7 @@
 				'position' : 'fixed',
 				'top'      : '10px',
 				'right'    : '10px',
-				'width'    : '300px',
+				'width'    : '500px',
 				'zIndex'   : 50000
 			}
 		},
@@ -105,7 +105,7 @@
 					'<span aria-hidden="true">&times;</span>' +
 					'<span class="sr-only">Close</span>' +
 				'</button>' +
-				'<span class="title"></span>: <span class="message"></span>' +
+				'<span class="title"></span><span class="message"></span>' +
 			'</div>',
 
 			'css'      : {},

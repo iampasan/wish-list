@@ -18,7 +18,7 @@ var LoginView = Backbone.View.extend({
             password: $('#input-password').val()
         };
 
-        if ($('#input-username').val() == "" || $('#input-username').val() == "") {
+        if ($('#input-username').val() == "" || $('#input-password').val() == "") {
             document.getElementById("sign-in-form").classList.add("was-validated");
         } else {
             $.ajax({

@@ -14,6 +14,7 @@ var AppRouter = Backbone.Router.extend({
     },
 
     list: function () {
+        console.log('List function called');
         if (localStorage.getItem('wl_username') && localStorage.getItem('wl_list_id')) {
             $('#log-out-btn').show();
             this.mainView.render();
@@ -53,7 +54,7 @@ var AppRouter = Backbone.Router.extend({
                 self.mainView.render(response);
             },
             error: function (response) {
-                $.toaster({ priority: 'danger', title: 'Error!', message:response });
+                $.toaster({ priority: 'danger', title: 'Error!', message: response });
             }
         });
     }
@@ -67,13 +68,13 @@ $(function () {
 });
 
 
-$( document ).ready(function() {
-    $('#log-out-btn').on('click', function() {
+$(document).ready(function () {
+    $('#log-out-btn').on('click', function () {
         localStorage.clear();
         Backbone.history.navigate("#login", { trigger: true });
     });
-    $('#btn-share-link').on('click', function() {
+    $('#btn-share-link').on('click', function () {
         alert("hii");
     });
-    
+
 });

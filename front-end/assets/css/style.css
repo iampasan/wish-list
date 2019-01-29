@@ -1,6 +1,10 @@
 .main-jumbotron {
     color: #ffffff !important;
-    background-image: url("../img/jumbtron-cover.jpeg");
+    background-image: url("../img/square1e.png");
     background-size: cover;
 }
 
+select option {
+    background: #1f2251;
+    color: #ffff;
+}

@@ -82,10 +82,11 @@ var MainView = Backbone.View.extend({
             this.ownerDetails = {}
         }
         this.itemsView.updateModel();
-        this.listDetailsView.updateModel();
+        //this.listDetailsView.updateModel();
         var main_model = { isOwner: this.isOwner };
         this.$el.html(this.template(main_model));
-        this.$('.list-details-container').html(this.listDetailsView.$el);
+        //this.$('.list-details-container').html(this.listDetailsView.$el);
+        this.listDetailsView.setElement(this.$('.list-details-container')).updateModel();
         this.$('#list-table') > $("#items-list").remove();
         this.$('#list-table').append(this.itemsView.$el);
         return this;
@@ -95,15 +96,15 @@ var MainView = Backbone.View.extend({
 //Backbone view list details
 var ListDetailsView = Backbone.View.extend({
     model: new List(),
+    template: _.template($('#list-details-template').html()),
     initialize: function (options) {
         this.parent = options.parent;
-        this.template = _.template($('#list-details-template').html());
     },
     events: {
         'click #share-btn': 'shareClick'
     },
     shareClick() {
-        console.log(config);
+        console.log('yo yo yo');
         var username = localStorage.getItem("wl_username");
         var viewLink = config.frontEndBaseUrl + "/#view/"
         var self = this;
@@ -113,7 +114,8 @@ var ListDetailsView = Backbone.View.extend({
             crossDomain: true,
             success: function (response) {
                 var shareLink = viewLink + response;
-                self.$('#share-url-p').text('Share Link : ' + shareLink);
+                self.$("#share-url-form").show();
+                self.$('#share-url-input').val(shareLink);
                 $.toaster({ priority: 'success', title: 'Shared!', message: 'List Shared!' });
 
             },
@@ -124,21 +126,29 @@ var ListDetailsView = Backbone.View.extend({
         });
     },
     updateModel() {
+        console.log('View model updating');
         var self = this;
         this.model.fetch({
             success: function () {
-                self.render();
                 console.log('Succeessfully loaded!');
+                self.render();
+                return self;
             },
             error: function () {
-                console.log('Failed to load items!');
+                console.log('Failed to load List!');
+                self.model.reset();
+                self.render();
+                return self;
             }
         });
     },
     render: function () {
+        
         var listDetailsModal = this.model.toJSON();
         listDetailsModal.isOwner = this.parent.isOwner;
         listDetailsModal.ownerDetails = this.parent.ownerDetails;
+        console.log('List details modal');
+        console.log(listDetailsModal);
         this.$el.html(this.template(listDetailsModal));
         return this;
     }
@@ -156,7 +166,6 @@ var ItemsView = Backbone.View.extend({
         var self = this;
         this.model.fetch({
             success: function (response) {
-                console.log(response);
                 console.log('Succeessfully loaded!');
                 self.render();
             },
@@ -168,12 +177,9 @@ var ItemsView = Backbone.View.extend({
         });
     },
     render: function () {
-        console.log('Render called');
         this.model.sort();
         var self = this;
         this.$el.html(''); //Flush
-        console.log('collection size');
-        console.log(this.model.toArray());
         if (this.model.toArray().length == 0) {
             self.$el.html('<tr><td colspan = 5><h4 class="text-center">The list is empty!</h3></td></tr>');
         } else {

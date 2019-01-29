@@ -3,22 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>List View</title>
-
-    <!--JQuery -->
-    <script src="assets/js/lib/jquery-3.3.1.min.js"></script>
-
-    <!--UnderScore JS-->
-    <script src="assets/js/lib/underscore-min.js"></script>
-
-    <!--Backbone JS -->
-    <script src="assets/js/lib/backbone-min.js"></script>
-
-    <!--Jquery Cookie lirary-->
-    <script src="assets/js/lib/jquery.cookie.js"></script>
-
-    <!--Jquery Toaster-->
-    <script src="assets/js/lib/jquery.toaster.js"></script>
+    <title>LIST IT</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
@@ -31,34 +16,61 @@
     <!--Custom Css-->
     <link rel="stylesheet" href="assets/css/style.css">
 
-    <!-- Bootstrap JS -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
-        crossorigin="anonymous"></script>
+    <!--     Fonts and icons     -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet" />
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <!-- Nucleo Icons -->
+    <link href="assets/css/nucleo-icons.css" rel="stylesheet" />
+    <!-- Blk CSS -->
+    <link href="assets/css/blk-design-system.css?v=1.0.0" rel="stylesheet" />
 
-    <!--Config-->
-    <script src="assets/js/config.js"></script>
 
 
 
 </head>
 
 <body>
-
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Wish List</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <button style="display:none" id="log-out-btn" class="btn btn-outline-primary my-2 my-sm-0">Logout</button>
-                </li>
-            </ul>
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg bg-info" color-on-scroll="100">
+        <div class="container-fluid">
+            <div class="navbar-translate">
+                <a class="navbar-brand" href="https://demos.creative-tim.com/blk-design-system/index.html" rel="tooltip"
+                    title="Designed and Coded by Creative Tim" data-placement="bottom" target="_blank">
+                    <span>LIST IT • </span> <small>Wishlist Manager</small>
+                </a>
+                <!-- <button class="navbar-toggler navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
+                    aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-bar bar1"></span>
+                    <span class="navbar-toggler-bar bar2"></span>
+                    <span class="navbar-toggler-bar bar3"></span>
+                </button> -->
+            </div>
+            <div class="justify-content-end" id="navigation">
+                <!-- <div class="navbar-collapse-header">
+                    <div class="row">
+                        <div class="col-6 collapse-brand">
+                            <a>
+                                LIST IT •
+                            </a>
+                        </div>
+                        <div class="col-6 collapse-close text-right">
+                            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navigation"
+                                aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                            </button>
+                        </div>
+                    </div>
+                </div> -->
+                <ul class="navbar-nav">
+                    <li class="nav-item" id="log-out-btn" style="display:none">
+                        <a class="btn btn-neutral btn-simple" href="javascript:void(0)">
+                            </i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
+    <!-- End Navbar -->
 
     <div id="content">
 
@@ -67,86 +79,133 @@
     <div class="item-operation-modal">
         <!--Renders the add,update and delete modals here-->
     </div>
+
+    <div class="register-bg"></div>
+    <div id="square1" class="square square-1"></div>
+    <div id="square2" class="square square-2"></div>
+    <div id="square3" class="square square-3"></div>
+    <div id="square4" class="square square-4"></div>
+    <div id="square5" class="square square-5"></div>
+    <div id="square6" class="square square-6"></div>
 </body>
 
 <!--Templates-->
 
 <script type="text/template" id="login-template">
-    <div class="container" id="signin-container">
-        <form class="form-signin mx-auto  needs-validation" id="sign-in-form" style="width:20rem;margin-top:10rem;" novalidate>
-            <h2 class="form-signin-heading text-center">Sign In</h2>
-            <label for="inputEmail" class="sr-only">User name :</label>
-            <input type="text" id="input-username" name="username" class="form-control" placeholder="Username" required autofocus>
-            <div class="invalid-feedback">
-                Please enter username!
+<div class="container">
+    <div class="content-center">
+        <div class="row mt-5">
+            <div class="col-lg-4 col-md-6 offset-lg-4 offset-md-3">
+                <div id="square7" class="square square-7"></div>
+                <div id="square8" class="square square-8"></div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="form-signin-heading text-center">Sign In</h2>
+                    </div>
+                    <div class="card-body">
+                        <form class="form-signin mx-auto  needs-validation" id="sign-in-form"
+                            novalidate>
+                            <label for="inputEmail" class="sr-only">User name :</label>
+                            <input type="text" id="input-username" name="username" class="form-control" placeholder="Username"
+                                required autofocus>
+                            <div class="invalid-feedback">
+                                Please enter username!
+                            </div>
+                            <label for="inputPassword" class="sr-only">Password</label>
+                            <input type="password" id="input-password" name="password" id="inputPassword" class="form-control mt-2"
+                                placeholder="Password" required>
+                            <div class="invalid-feedback">
+                                Please enter password!
+                            </div>
+                        </form>
+                        <div class="text-center mb-2">
+                            <button class="btn btn-lg btn-round btn-success btn-block mt-4" id="login-btn">Sign In</button>
+                            <small class="mt-2"><a class="text-white" href="#register">Not a user? Register Now!</a></small>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" id="input-password" name="password" id="inputPassword" class="form-control mt-2" placeholder="Password" required>
-            <div class="invalid-feedback">
-                Please enter password!
-            </div>
-            <button class="btn btn-lg btn-primary btn-block mt-4" id="login-btn">Sign in</button>
-            <small class="mt-1"><a class="" href="#register">Not a user? Register Now!</a></small>
-        </form>
+        </div>
     </div>
+</div>
 </script>
 
 
 <script type="text/template" id="register-template">
-    <div class="container">
-        <form class="form-signin mx-auto  needs-validation" id="sign-in-form" style="width:20rem;margin-top:10rem;" novalidate>
-            <h2 class="form-signin-heading text-center">Sign Up</h2>
+<div class="container">
+    <div class="content-center">
+        <div class="row mt-5">
+            <div class="col-lg-4 col-md-6 offset-lg-4 offset-md-3">
+                <div id="square7" class="square square-7"></div>
+                <div id="square8" class="square square-8"></div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="form-signin-heading text-center">Sign Up</h2>
+                    </div>
+                    <div class="card-body">
+                        <form class="form-signin mx-auto  needs-validation" id="sign-in-form" novalidate>
+                            <label for="input-username" class="sr-only">Pick a username :</label>
+                            <input type="text" id="input-username" name="username" class="form-control" placeholder="Username"
+                                required autofocus>
+                            <div class="invalid-feedback username-feedback">
+                                Please enter a username!
+                            </div>
 
-            <label for="input-username" class="sr-only">Pick a username :</label>
-            <input type="text" id="input-username" name="username" class="form-control" placeholder="Username" required autofocus>
-            <div class="invalid-feedback username-feedback">
-                Please enter a username!
+                            <label for="inputEmail" class="sr-only">Enter your name :</label>
+                            <input type="text" id="input-name" name="username" class="form-control mt-2" placeholder="Name"
+                                required autofocus>
+                            <div class="invalid-feedback username-feedback">
+                                Please enter your name!
+                            </div>
+
+                            <label for="inputPassword" class="sr-only">Password</label>
+                            <input type="password" id="input-password" name="password" id="inputPassword" class="form-control mt-2"
+                                placeholder="Password" required>
+                            <div class="invalid-feedback">
+                                Please enter a password!
+                            </div>
+
+                            <label for="listname" class="sr-only">List name :</label>
+                            <input type="text" id="input-list-name" name="listname" class="form-control mt-2"
+                                placeholder="List Name" required autofocus>
+                            <div class="invalid-feedback">
+                                Please enter a list name!
+                            </div>
+
+                            <label for="listname" class="sr-only">List description :</label>
+                            <textarea id="input-list-description" class="form-control mt-2" placeholder="List Description"
+                                required autofocus></textarea>
+                            <div class="invalid-feedback">
+                                Please enter a list description!
+                            </div>
+                        </form>
+                        <div class="text-center mb-2">
+                                <button class="btn btn-lg btn-round btn-success btn-block mt-4" id="register-btn">Sign Up</button>
+                                <small class="mt-2"><a class="text-white" href="#login">Already registered? Login Now!</a></small>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <label for="inputEmail" class="sr-only">Enter your name :</label>
-            <input type="text" id="input-name" name="username" class="form-control mt-2" placeholder="Name" required autofocus>
-            <div class="invalid-feedback username-feedback">
-                Please enter your name!
-            </div>
-
-            <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" id="input-password" name="password" id="inputPassword" class="form-control mt-2" placeholder="Password" required>
-            <div class="invalid-feedback">
-                Please enter a password!
-            </div>
-
-            <label for="listname" class="sr-only">List name :</label>
-            <input type="text" id="input-list-name" name="listname" class="form-control mt-2" placeholder="List Name" required autofocus>
-            <div class="invalid-feedback">
-                Please enter a list name!
-            </div>
-
-            <label for="listname" class="sr-only">List description :</label>
-            <textarea id="input-list-description" class="form-control mt-2" placeholder="List Description" required autofocus></textarea>
-            <div class="invalid-feedback">
-                Please enter a list description!
-            </div>
-
-            <button class="btn btn-lg btn-primary btn-block mt-4" id="register-btn">Sign Up</button>
-            <small class="mt-1"><a class="" href="#login">Already registered? Login Now!</a></small>
-        </form>
+        </div>
     </div>
+</div>
+
 </script>
 
 
 
 <script type="text/template" id="main-template">
     <div class="list-details-container"></div>
-    <div class="container-fluid wish-list">
+    <div class="container wish-list">
         <!-- Button trigger modal -->
         <% if (isOwner) { %> 
-        <button type="button" class="btn btn-primary mb-3" id="item-add-modal-btn" data-toggle="modal" data-target="#itemModal">
+        <button type="button" class="btn btn-success btn-simple mb-3" id="item-add-modal-btn" data-toggle="modal" data-target="#itemModal">
             Add Item <i class="fas fa-plus-circle ml-1"></i>
         </button>
         <% } %> 
 
         <table class="table" id="list-table">
-            <thead class="thead-dark">
+            <thead class="thead">
                 <tr>
                     <th scope="col">Title</th>
                     <th scope="col">URL</th>
@@ -163,7 +222,7 @@
 
 <script type="text/template" id="list-details-template">
     <div class="jumbotron jumbotron-fluid main-jumbotron">
-        <div class="container-fluid">
+        <div class="container">
             <h1 class="display-4">
                 <%= name %>
             </h1>
@@ -173,7 +232,12 @@
                     <button type="button" class="btn btn-outline-primary" id="share-btn">Share List
                             <i class="fas fa-share-alt ml-1"></i>
                     </button>
-                    <p class="mt-2" id="share-url-p"></p>
+                        <div class="form-inline" class="mt-5">
+                            <div class="form-group mb-2"  id="share-url-form" style="display:none">
+                              <input type="text" class="form-control" id="share-url-input">
+                              <button class="btn btn-success" id="copy-url-btn"><i class="far fa-copy"></i></button>
+                            </div>                           
+                        </div>
                 <% } else {%>
                     <p>Owner : <%= ownerDetails.owner_name %></p>
                 <% }%>
@@ -194,7 +258,7 @@
     </td>
     <td>
         <span class="price">
-            <%= price %>
+            Rs. <%= price %>
         </span>
     </td>
     <td>
@@ -204,8 +268,8 @@
     </td>
     <td >
         <% if (isOwner) { %>    
-            <button class="btn btn-primary" id="update-item-trigger-btn">Edit<i class="far fa-edit ml-2"></i></button>
-            <button class="btn btn-danger" id="delete-item-trigger-btn"><i class="far fa-trash-alt"></i></button>
+            <button class="btn btn-info btn-simple" id="update-item-trigger-btn">Edit<i class="far fa-edit ml-2"></i></button>
+            <button class="btn btn-danger btn-simple" id="delete-item-trigger-btn"><i class="far fa-trash-alt"></i></button>
         <% } %>
     </td>
 </script>
@@ -234,7 +298,7 @@
 
 
 <script type="text/template" id="item-operation-template">
-<div class="modal fade" id="itemModal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade modal-black" id="itemModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -257,14 +321,14 @@
                         <label for="inputURL">URL</label>
                         <input type="url" class="form-control" id="input-url" placeholder="Enter URL" required>
                         <div class="invalid-feedback username-feedback">
-                                Please enter URL!
+                                Please enter a valid URL!
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="inputPrice">Price</label>
                         <input type="number" class="form-control" id="input-price" placeholder="Enter Price" required>
                         <div class="invalid-feedback username-feedback">
-                                Please enter price!
+                                Please enter a valid price!
                         </div>
                     </div>
                     <div class="form-group">
@@ -317,18 +381,34 @@
     </div>
 </div>
 </script>
+<!--JQuery -->
+<script src="assets/js/lib/jquery-3.3.1.min.js"></script>
 
-<style>
-    .no-style {
-        all: unset;
-    }
-</style>
+<!--UnderScore JS-->
+<script src="assets/js/lib/underscore-min.js"></script>
 
+<!--Backbone JS -->
+<script src="assets/js/lib/backbone-min.js"></script>
 
-<!--Backbone app files-->
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+    crossorigin="anonymous"></script>
+
+<!--Jquery Cookie lirary-->
+<script src="assets/js/lib/jquery.cookie.js"></script>
+
+<!--Jquery Toaster-->
+<script src="assets/js/lib/jquery.toaster.js"></script>
+
+<!--Config and Backbone app files-->
+<script src="assets/js/config.js"></script>
 <script src="assets/js/user_admission.js"></script>
 <script src="assets/js/list.js"></script>
 <script src="assets/js/app.js"></script>
+
+<!-- Control Center for Black UI Kit: parallax effects, scripts for the example pages etc -->
+<!-- <script src="assets/js/lib/blk-design/blk-design-system.min.js?v=1.0.0" type="text/javascript"></script> -->
+<!-- Clipboard JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
 
 
