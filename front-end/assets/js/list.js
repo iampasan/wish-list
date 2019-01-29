@@ -162,15 +162,18 @@ var ItemsView = Backbone.View.extend({
             },
             error: function () {
                 console.log('Failed to load items!');
-                self.model = new Items();
+                self.model.reset();
                 self.render();
             }
         });
     },
     render: function () {
+        console.log('Render called');
         this.model.sort();
         var self = this;
         this.$el.html(''); //Flush
+        console.log('collection size');
+        console.log(this.model.toArray());
         if (this.model.toArray().length == 0) {
             self.$el.html('<tr><td colspan = 5><h4 class="text-center">The list is empty!</h3></td></tr>');
         } else {
@@ -250,14 +253,17 @@ var ItemOperationView = Backbone.View.extend({
         $('#itemModal').modal('hide');
     },
     save: function () {
+        console.log('Save called');
         var self = this;
         if (getCurrentModalItem()) {
             self.model.save(getCurrentModalItem(), {
                 wait: true,
                 success: function (model, response) {
                     //Id is the response on this endpoint
+                    console.log('Save done');
                     self.model.set('id', response);
                     self.parent.items.add(self.model);
+                    console.log(self.parent.items);
                 },
                 error: function () {
                     console.log('Failed to post');
