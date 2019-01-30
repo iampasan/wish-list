@@ -8,7 +8,6 @@ var itemsRequestUrl = config.apiBaseUrl + '/items';
 //List Modal
 var List = Backbone.Model.extend({
     url: function () {
-        console.log(currentListId);
         return listRequestUrl + '/list/' + currentListId;
     },
     defaults: {
@@ -34,7 +33,6 @@ var Item = Backbone.Model.extend({
 var Items = Backbone.Collection.extend({
     model: Item,
     url: function () {
-        console.log(currentListId);
         return itemsRequestUrl + '/itemsByList/' + currentListId;
     },
     comparator: function (item) {
@@ -104,7 +102,6 @@ var ListDetailsView = Backbone.View.extend({
         'click #share-btn': 'shareClick'
     },
     shareClick() {
-        console.log('yo yo yo');
         var username = localStorage.getItem("wl_username");
         var viewLink = config.frontEndBaseUrl + "/#view/"
         var self = this;
@@ -126,7 +123,6 @@ var ListDetailsView = Backbone.View.extend({
         });
     },
     updateModel() {
-        console.log('View model updating');
         var self = this;
         this.model.fetch({
             success: function () {
@@ -147,8 +143,6 @@ var ListDetailsView = Backbone.View.extend({
         var listDetailsModal = this.model.toJSON();
         listDetailsModal.isOwner = this.parent.isOwner;
         listDetailsModal.ownerDetails = this.parent.ownerDetails;
-        console.log('List details modal');
-        console.log(listDetailsModal);
         this.$el.html(this.template(listDetailsModal));
         return this;
     }
@@ -259,17 +253,14 @@ var ItemOperationView = Backbone.View.extend({
         $('#itemModal').modal('hide');
     },
     save: function () {
-        console.log('Save called');
         var self = this;
         if (getCurrentModalItem()) {
             self.model.save(getCurrentModalItem(), {
                 wait: true,
                 success: function (model, response) {
                     //Id is the response on this endpoint
-                    console.log('Save done');
                     self.model.set('id', response);
                     self.parent.items.add(self.model);
-                    console.log(self.parent.items);
                 },
                 error: function () {
                     console.log('Failed to post');
@@ -353,6 +344,7 @@ function getCurrentModalItem() {
     if (title == ""
         || url == ""
         || price == ""
+        || price < 0
         || priority == ""
     ) {
         document.getElementById("#add-item-form").classList.add("was-validated");

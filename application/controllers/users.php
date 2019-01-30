@@ -20,6 +20,8 @@ class Users extends REST_Controller {
         $username = $this->post('username');
 
         $password = $this->post('password');
+        
+        $password = crypt($password,'randomSault'); 
 
         if (!$username || !$password) {
 
@@ -48,6 +50,8 @@ class Users extends REST_Controller {
         $username = $this->post('username');
 
         $password = $this->post('password');
+        
+        $password = crypt($password,'randomSault');
         
         $name = $this->post('name');
         
