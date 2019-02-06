@@ -10,7 +10,7 @@ class Items extends REST_Controller{
     {
         parent::__construct();
 
-        $this->load->model('item_model');
+        $this->load->model('Item_model');
     }
 
     //Get Item by ID
@@ -25,7 +25,7 @@ class Items extends REST_Controller{
             exit;
         }
 
-        $result = $this->item_model->getItemById($id);
+        $result = $this->Item_model->getItemById($id);
 
         if($result){
 
@@ -53,7 +53,7 @@ class Items extends REST_Controller{
             exit;
         }
         
-        $result = $this->item_model->getItemsByListId($list_id);
+        $result = $this->Item_model->getItemsByListId($list_id);
 
         if($result){
 
@@ -87,7 +87,7 @@ class Items extends REST_Controller{
 
          }else{
 
-            $result = $this->item_model->addItem(array("title"=>$title, "list_id"=>$list_id, "url"=>$url, "price"=>$price, "priority"=>$priority));
+            $result = $this->Item_model->addItem(array("title"=>$title, "list_id"=>$list_id, "url"=>$url, "price"=>$price, "priority"=>$priority));
 
             if($result){
                 
@@ -127,7 +127,7 @@ class Items extends REST_Controller{
                 //$this->response("Item information missing", 400);
 
          }else{
-            $result = $this->item_model->updateItem($id, array("title"=>$title, "list_id"=>$list_id, "url"=>$url, "price"=>$price, "priority"=>$priority));
+            $result = $this->Item_model->updateItem($id, array("title"=>$title, "list_id"=>$list_id, "url"=>$url, "price"=>$price, "priority"=>$priority));
 
             if($result){
                 
@@ -155,7 +155,7 @@ class Items extends REST_Controller{
 
         }
          
-        if($this->item_model->deleteItem($id))
+        if($this->Item_model->deleteItem($id))
         {
 
             $this->response("Successfully Deleted", 200);

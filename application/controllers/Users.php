@@ -10,8 +10,8 @@ class Users extends REST_Controller {
     public function __construct() {
         parent::__construct();
 
-        $this->load->model('user_model');
-        $this->load->model('list_model');
+        $this->load->model('User_model');
+        $this->load->model('List_model');
     }
 
     //Log in call
@@ -28,13 +28,13 @@ class Users extends REST_Controller {
             $this->response("Login information missing", 400);
         } else {
 
-            $user = $this->user_model->validateUser($username, $password);
+            $user = $this->User_model->validateUser($username, $password);
 
             if (empty($user)) {
                 $this->response("Username or password does not match, please try again.", 400);
             } else {
 
-                $list = $this->list_model->getListByUser($username);
+                $list = $this->List_model->getListByUser($username);
 
                 $response["username"] = $username;
 
@@ -60,7 +60,7 @@ class Users extends REST_Controller {
         $list_description = $this->post('list_description');
         
 
-        if ($this->user_model->userExists($username)) {
+        if ($this->User_model->userExists($username)) {
 
             $this->response("Username not available!", 400);
         } else {
@@ -72,13 +72,13 @@ class Users extends REST_Controller {
             $list['description'] = $list_description;
             $list['owner'] = $username;
             
-            $user_register = $this->user_model->addUser($user);
-            $list_creation = $this->list_model->createList($list);            
+            $user_register = $this->User_model->addUser($user);
+            $list_creation = $this->List_model->createList($list);            
             
             
             if($user_register && $list_creation){
                 $response["username"] = $username;
-                $response["list_id"] = $this->list_model->getListByUser($username)['id'];
+                $response["list_id"] = $this->List_model->getListByUser($username)['id'];
                 
                  $this->response($response, 200);
             }else{
@@ -110,7 +110,7 @@ class Users extends REST_Controller {
 
             //$this->response("Item information missing", 400);
         } else {
-            $result = $this->item_model->updateItem($id, array("title" => $title, "list_id" => $list_id, "url" => $url, "price" => $price, "priority" => $priority));
+            $result = $this->Item_model->updateItem($id, array("title" => $title, "list_id" => $list_id, "url" => $url, "price" => $price, "priority" => $priority));
 
             if ($result) {
 
@@ -132,7 +132,7 @@ class Users extends REST_Controller {
             $this->response("ID missing", 404);
         }
 
-        if ($this->item_model->deleteItem($id)) {
+        if ($this->Item_model->deleteItem($id)) {
 
             $this->response("Successfully Deleted", 200);
         } else {

@@ -11,19 +11,7 @@ class Pages extends CI_Controller {
     }
 
     public function index() {
-        if (!is_null(get_cookie('wl_list_id'))) {
-            $this->load->view('head');
-            $this->load->view('list_view');
-            $this->load->view('footer');
-        }else{
-            $this->login();
-        }
-    }
-
-    public function login() {
-        $this->load->view('head');
-        $this->load->view('signin');
-        $this->load->view('footer');
-    }
+        echo "Welcome to WISHLIST API!";
+    }   
 
 }

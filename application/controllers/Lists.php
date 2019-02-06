@@ -10,9 +10,9 @@ class Lists extends REST_Controller {
     public function __construct() {
         parent::__construct();
 
-        $this->load->model('item_model');
-        $this->load->model('list_model');
-        $this->load->model('user_model');
+        $this->load->model('Item_model');
+        $this->load->model('List_model');
+        $this->load->model('User_model');
     }
 
     //Get List by ID
@@ -27,13 +27,13 @@ class Lists extends REST_Controller {
             exit;
         }
 
-        $list = $this->list_model->getListById($id);
+        $list = $this->List_model->getListById($id);
 
         if ($list) {
 
             //$list = $this->appendItems($list);
             //Put owner's name instead of user ID
-            //$list['owner'] = $this->user_model->getName($list['owner'])['name'];
+            //$list['owner'] = $this->User_model->getName($list['owner'])['name'];
             unset($list['owner']);
 
             $this->response($list, 200);
@@ -56,14 +56,14 @@ class Lists extends REST_Controller {
             $this->response("No username specified!", 400);
 
             exit;
-        } elseif (!$this->user_model->userExists($username)) {
+        } elseif (!$this->User_model->userExists($username)) {
 
             $this->response("Invalid user name!", 400);
 
             exit;
         }
 
-        $list = $this->list_model->getListByUser($username);
+        $list = $this->List_model->getListByUser($username);
 
         if ($list) {
 
@@ -81,7 +81,7 @@ class Lists extends REST_Controller {
     }
 
     private function appendItems($list) {
-        $items = $this->item_model->getItemsByListId($list['id']);
+        $items = $this->Item_model->getItemsByListId($list['id']);
 
         $list['items'] = $items;
 
@@ -95,10 +95,10 @@ class Lists extends REST_Controller {
 
     public function getShareDetails_get($encoded_username) {
         $decoded_username = $this->base64url_decode($encoded_username);
-        $user = $this->user_model->getUser($decoded_username);
+        $user = $this->User_model->getUser($decoded_username);
         if($user){
             $response['owner_name'] = $user['name'];
-            $response['list_id'] = $this->list_model->getListByUser($user['username'])['id'];
+            $response['list_id'] = $this->List_model->getListByUser($user['username'])['id'];
             $this->response($response, 200);
         }else{
             $this->response("Invalid URL", 400);
